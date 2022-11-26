@@ -5,6 +5,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.ArrayList;
+
 public class Avatar {
     private Canvas canvas;
     private GraphicsContext gc;
@@ -12,15 +14,16 @@ public class Avatar {
 
     public Vector pos;
     public Vector direction;
-
+    public int bullets;
     public Avatar(Canvas canvas){
-
+        bullets=6;
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank.png").getPath();
         tank = new Image(uri);
         pos = new Vector(100,100);
         direction = new Vector(2,0);
+
     }
 
 
@@ -34,12 +37,7 @@ public class Avatar {
 
     }
 
-    public void setPosition(double x, double y) {
 
-        pos.x = (int) x-25;
-        pos.y = (int) y-25;
-
-    }
     public void changeAngle(double a ){
 
         double amp = direction.getApmlitude();

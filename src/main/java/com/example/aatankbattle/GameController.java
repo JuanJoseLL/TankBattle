@@ -11,10 +11,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,22 +28,30 @@ public class GameController implements Initializable {
     private Canvas canvas;
     private GraphicsContext gc;
     private boolean isRunning=true;
+    private Image[] explode=new Image[3];
+
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
     private Avatar avatar;
-
+    private Avatar avatar2;
+    private boolean exploding=true;
     //Estados de las teclas
     boolean Wpressed = false;
     boolean Apressed = false;
     boolean Spressed = false;
     boolean Dpressed = false;
 
+    boolean upPressed = false;
+    boolean downPressed = false;
+    boolean rightPressed = false;
+    boolean leftPressed = false;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
 
+        //Se generan enemigos en el canvas
         enemies=new ArrayList<>();
         enemies.add(new Enemy(canvas,300,100));
         enemies.add(new Enemy(canvas,300,300));
@@ -51,7 +61,16 @@ public class GameController implements Initializable {
         canvas.setOnKeyPressed(this::onKeyPressed);
         canvas.setOnKeyReleased(this::onKeyReleased);
 
+
         avatar = new Avatar(canvas);
+        avatar2 = new Avatar(canvas);
+
+        String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
+        String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
+        String uri2 = "file:"+GameMain.class.getResource("explode2.png").getPath();
+        explode[0]=new Image(uri0);
+        explode[1]=new Image(uri1);
+        explode[2]=new Image(uri2);
 
         draw();
     }
@@ -63,7 +82,15 @@ public class GameController implements Initializable {
                         Platform.runLater(() -> {
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                            if(avatar.bullets==0){
+                                gc.setFont(Font.font(35));
+                                gc.setFill(Color.YELLOW);
+                                gc.fillText("Your`re out of bullets \n Press R to recharge ",canvas.getWidth()/3, canvas.getHeight()/2);
+                            }
                             avatar.draw();
+                            avatar2.draw();
+                            //System.out.println(avatar.pos.x);
+                            //System.out.println(avatar.pos.y);
                             //Pintar enemigos
                             for (int i = 0; i < enemies.size(); i++) {
                                 enemies.get(i).draw();
@@ -75,6 +102,7 @@ public class GameController implements Initializable {
                                         bullets.get(i).pos.y < -20 ||
                                         bullets.get(i).pos.x < -20) {
                                     bullets.remove(i);
+
                                 }
 
                             }
@@ -93,6 +121,7 @@ public class GameController implements Initializable {
         ).start();
     }
     private void detectColission() {
+
         for(int i=0;i<enemies.size();i++){
             for(int j=0;j<bullets.size();j++){
                 Bullet b=bullets.get(j);
@@ -100,7 +129,7 @@ public class GameController implements Initializable {
                 double cateto1 = b.pos.x-e.x;
                 double cateto2 = b.pos.y-e.y;
                 double distance = Math.sqrt(Math.pow(cateto1,2) + Math.pow(cateto2,2));
-                if(distance < 12.5){
+                if(distance < 15){
                     bullets.remove(j);
                     enemies.remove(i);
                     return;
@@ -108,6 +137,7 @@ public class GameController implements Initializable {
             }
         }
     }
+
     private void doKeyboardActions() {
         if (Wpressed) {
             avatar.moveForward();
@@ -120,6 +150,18 @@ public class GameController implements Initializable {
         }
         if (Dpressed) {
             avatar.changeAngle(3);
+        }
+        if(upPressed){
+            avatar2.moveForward();
+        }
+        if(leftPressed){
+            avatar2.changeAngle(-3);
+        }
+        if(downPressed){
+            avatar2.moveBackward();
+        }
+        if(rightPressed){
+            avatar2.changeAngle(3);
         }
     }
 
@@ -136,6 +178,18 @@ public class GameController implements Initializable {
         if(keyEvent.getCode() == KeyCode.D){
             Dpressed = false;
         }
+        if(keyEvent.getCode() == KeyCode.UP){
+            upPressed = false;
+        }
+        if(keyEvent.getCode() == KeyCode.LEFT){
+            leftPressed = false;
+        }
+        if(keyEvent.getCode() == KeyCode.DOWN){
+            downPressed = false;
+        }
+        if(keyEvent.getCode() == KeyCode.RIGHT){
+            rightPressed = false;
+        }
     }
     private void onKeyPressed(KeyEvent keyEvent) {
 
@@ -151,11 +205,31 @@ public class GameController implements Initializable {
         if (keyEvent.getCode() == KeyCode.D) {
             Dpressed = true;
         }
+        if (keyEvent.getCode() == KeyCode.UP) {
+            upPressed = true;
+        }
+        if (keyEvent.getCode() == KeyCode.LEFT) {
+            leftPressed = true;
+        }
+        if (keyEvent.getCode() == KeyCode.DOWN) {
+            downPressed = true;
+        }
+        if (keyEvent.getCode() == KeyCode.RIGHT) {
+            rightPressed = true;
+        }
+        if(keyEvent.getCode() == KeyCode.R){
+            avatar.bullets=6;
+        }
         if (keyEvent.getCode()==KeyCode.SPACE){
-            Bullet bullet = new Bullet(canvas,
-                    new Vector(avatar.pos.x , avatar.pos.y),
-                    new Vector(2*avatar.direction.x,2*avatar.direction.y));
-            bullets.add(bullet);
+            if(avatar.bullets==0){
+
+            }else{
+                Bullet bullet = new Bullet(canvas,
+                        new Vector(avatar.pos.x , avatar.pos.y),
+                        new Vector(2*avatar.direction.x,2*avatar.direction.y));
+                bullets.add(bullet);
+                avatar.bullets--;
+            }
         }
     }
 }
