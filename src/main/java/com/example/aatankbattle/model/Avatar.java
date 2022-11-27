@@ -42,6 +42,8 @@ public class Avatar {
         tank = new Image(uri);
         pos = new Vector(100,200);
         direction = new Vector(2,0);
+        String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
+        heart = new Image(uri2);
 
     }
 
@@ -52,7 +54,21 @@ public class Avatar {
         gc.setFont(Font.font(10));
         gc.setFill(Color.WHEAT);
         gc.fillText(name,-20, -35);
-        gc.drawImage(heart,-25,-30,10,10);
+        if(life>=1){
+            gc.drawImage(heart,-25,-30,10,10);
+        }
+        if(life>=2){
+            gc.drawImage(heart,-20,-30,10,10);
+        }
+        if(life>=3){
+            gc.drawImage(heart,-15,-30,10,10);
+        }
+        if(life>=4){
+            gc.drawImage(heart,-10,-30,10,10);
+        }
+        if (life >= 5) {
+            gc.drawImage(heart, -5, -30, 10, 10);
+        }
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank,-25,-25,50,50);
         gc.restore();

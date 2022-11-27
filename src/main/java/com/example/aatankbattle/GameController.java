@@ -245,30 +245,35 @@ public class GameController implements Initializable {
     }
 
     private void doKeyboardActions() {
-        if (Wpressed) {
-            avatar.moveForward();
+        if(avatar!=null){
+            if (Wpressed) {
+                avatar.moveForward();
+            }
+            if (Apressed) {
+                avatar.changeAngle(-3);
+            }
+            if (Spressed) {
+                avatar.moveBackward();
+            }
+            if (Dpressed) {
+                avatar.changeAngle(3);
+            }
         }
-        if (Apressed) {
-            avatar.changeAngle(-3);
-        }
-        if (Spressed) {
-            avatar.moveBackward();
-        }
-        if (Dpressed) {
-            avatar.changeAngle(3);
-        }
-        if(upPressed){
-            avatar2.moveForward();
-        }
-        if(leftPressed){
-            avatar2.changeAngle(-3);
-        }
-        if(downPressed){
-            avatar2.moveBackward();
-        }
-        if(rightPressed){
-            avatar2.changeAngle(3);
-        }
+       if(avatar2!=null){
+           if(upPressed){
+               avatar2.moveForward();
+           }
+           if(leftPressed){
+               avatar2.changeAngle(-3);
+           }
+           if(downPressed){
+               avatar2.moveBackward();
+           }
+           if(rightPressed){
+               avatar2.changeAngle(3);
+           }
+       }
+
     }
 
     private void onKeyReleased(KeyEvent keyEvent) {
