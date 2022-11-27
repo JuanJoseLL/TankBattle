@@ -89,7 +89,6 @@ public class Avatar {
         if (bullets >= 5) {
             gc.drawImage(bullet, 15, 20, 10, 10);
         }
-
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank,-25,-25,50,50);
         gc.restore();

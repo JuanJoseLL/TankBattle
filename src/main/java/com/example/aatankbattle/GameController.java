@@ -88,6 +88,20 @@ public class GameController implements Initializable {
                 () -> {
                     while (isRunning) {
                         Platform.runLater(() -> {
+
+                            if(enemies.size() == 0 && avatar==null ){
+                                gc.setFont(Font.font(50));
+                                gc.setFill(Color.YELLOW);
+                                gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
+
+                            }
+                            if( enemies.size() == 0 && avatar2 == null){
+                                gc.setFont(Font.font(50));
+                                gc.setFill(Color.YELLOW);
+                                gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
+
+                            }
+
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
