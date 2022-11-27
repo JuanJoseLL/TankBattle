@@ -13,7 +13,7 @@ public class Avatar {
     private Canvas canvas;
     private GraphicsContext gc;
     private Image tank;
-
+    private Image heart;
     public Vector pos;
     public Vector direction;
     public int bullets;
@@ -29,7 +29,8 @@ public class Avatar {
         tank = new Image(uri);
         pos = new Vector(100,100);
         direction = new Vector(2,0);
-
+        String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
+        heart = new Image(uri2);
     }
     public Avatar(Canvas canvas,int o){
         bullets=6;
@@ -50,7 +51,8 @@ public class Avatar {
         gc.translate(pos.x,pos.y);
         gc.setFont(Font.font(10));
         gc.setFill(Color.WHEAT);
-        gc.fillText(name,-15, -25);
+        gc.fillText(name,-20, -35);
+        gc.drawImage(heart,-25,-30,10,10);
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank,-25,-25,50,50);
         gc.restore();
