@@ -4,6 +4,8 @@ import com.example.aatankbattle.GameMain;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
@@ -15,8 +17,12 @@ public class Avatar {
     public Vector pos;
     public Vector direction;
     public int bullets;
+    public int life;
+    private String name;
     public Avatar(Canvas canvas){
         bullets=6;
+        life=5;
+        name="JuanJo";
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank.png").getPath();
@@ -27,6 +33,8 @@ public class Avatar {
     }
     public Avatar(Canvas canvas,int o){
         bullets=6;
+        life=5;
+        name="Sara";
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank23.png").getPath();
@@ -38,9 +46,11 @@ public class Avatar {
 
 
     public void draw(){
-
         gc.save();
         gc.translate(pos.x,pos.y);
+        gc.setFont(Font.font(10));
+        gc.setFill(Color.WHEAT);
+        gc.fillText(name,-15, -25);
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank,-25,-25,50,50);
         gc.restore();
@@ -67,4 +77,7 @@ public class Avatar {
         pos.y -= direction.y;
     }
 
+    public String getName() {
+        return name;
+    }
 }

@@ -10,11 +10,11 @@ public class Bullet {
     private GraphicsContext gc;
     public Vector pos;
     public Vector direction;
-
-    public Bullet(Canvas canvas, Vector pos, Vector dir) {
+    private int player;
+    public Bullet(Canvas canvas, Vector pos, Vector dir,int player) {
         this.canvas = canvas;
         gc= canvas.getGraphicsContext2D();
-
+        this.player=player;
         this.pos = pos;
         this.direction = dir;
     }
@@ -25,5 +25,9 @@ public class Bullet {
         pos.x+=direction.x;
         pos.y+=direction.y;
 
+    }
+
+    public int getPlayer() {
+        return player;
     }
 }

@@ -90,14 +90,26 @@ public class GameController implements Initializable {
                         Platform.runLater(() -> {
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                            if(avatar.bullets==0){
-                                gc.setFont(Font.font(35));
-                                gc.setFill(Color.YELLOW);
-                                gc.fillText("Your`re out of bullets \n Press R to recharge ",canvas.getWidth()/3, canvas.getHeight()/2);
-                            }
+
                             drawBackground();
-                            avatar.draw();
-                            avatar2.draw();
+                            if(avatar!=null){
+                                avatar.draw();
+
+                                if(avatar.bullets==0 ){
+                                    gc.setFont(Font.font(35));
+                                    gc.setFill(Color.YELLOW);
+                                    gc.fillText("Your`re out of bullets \n Press R to recharge ",canvas.getWidth()/3, canvas.getHeight()/2);
+                                }
+                            }
+                            if(avatar2!=null){
+                                avatar2.draw();
+                                if(avatar2.bullets==0 ){
+                                    gc.setFont(Font.font(35));
+                                    gc.setFill(Color.YELLOW);
+                                    gc.fillText("Your`re out of bullets \n Press R to recharge ",canvas.getWidth()/3, canvas.getHeight()/2);
+                                }
+                            }
+
 
                             //System.out.println(avatar.pos.x);
                             //System.out.println(avatar.pos.y);
@@ -119,6 +131,7 @@ public class GameController implements Initializable {
                             }
                             //Colisiones
                             detectColission();
+                            detectColissionAvatar();
                             doKeyboardActions();
                         });
                         //Sleep
@@ -131,25 +144,27 @@ public class GameController implements Initializable {
                 }
         ).start();
     }
-    public void sequence(Enemy a){
+
+
+    public void sequence(double x,double y){
         exploding=true;
         new Thread(
                 () -> {
                     while(exploding){
                         Platform.runLater(()->{
                             if(cont<50){
-                                gc.drawImage(explode[0],a.x-75,a.y-75,200,200);
+                                gc.drawImage(explode[0],x-75,y-75,200,200);
                             }else if (cont > 50 && cont < 100){
-                                gc.drawImage(explode[1],a.x-80,a.y-80,200,200);
+                                gc.drawImage(explode[1],x-80,y-80,200,200);
                             }else if(cont > 100){
-                                gc.drawImage(explode[2],a.x-75,a.y-75,200,200);
+                                gc.drawImage(explode[2],x-75,y-75,200,200);
                             }
                             if(cont > 150){
                                 exploding=false;
                             }
                         });
                         try{
-                            Thread.sleep(10);
+                            Thread.sleep(5);
                         } catch (InterruptedException e) {
                             throw new RuntimeException(e);
                         }
@@ -161,18 +176,67 @@ public class GameController implements Initializable {
         ).start();
         cont=0;
     }
+    private void detectColissionAvatar() {
+        for (int i=0;i<bullets.size();i++){
+            Bullet b=bullets.get(i);
+            double distanceAv2 = 0;
+            double distanceAv1 = 0;
+            if(avatar!=null){
+                double cateto3 = b.pos.x - avatar.pos.x;
+                double cateto4 = b.pos.y - avatar.pos.y;
+                distanceAv1 = Math.sqrt(Math.pow(cateto3, 2) + Math.pow(cateto4, 2));
+            }
+
+            if (avatar2 != null) {
+                double cateto5 = b.pos.x - avatar2.pos.x;
+                double cateto6 = b.pos.y - avatar2.pos.y;
+                distanceAv2 = Math.sqrt(Math.pow(cateto5, 2) + Math.pow(cateto6, 2));
+            }
+
+            if (distanceAv1 < 25 && b.getPlayer() != 1) {
+                if(avatar!=null){
+                    sequence(avatar.pos.x-15, avatar.pos.y-15);
+                    System.out.println("hit al tanque 1");
+                    bullets.remove(i);
+                    avatar.life--;
+                    System.out.println(avatar.life);
+                    if (avatar.life == 0) {
+                        avatar = null;
+                    }
+                    return;
+                }
+
+            }
+            if (distanceAv2 < 25 && b.getPlayer() != 2) {
+                if(avatar2!=null){
+                    sequence(avatar2.pos.x-15, avatar2.pos.y-15);
+                    System.out.println("hit al tanque 2");
+                    bullets.remove(i);
+                    avatar2.life--;
+                    System.out.println(avatar2.life);
+                    if (avatar2.life == 0) {
+                        avatar2 = null;
+                    }
+                    return;
+                }
+
+            }
+        }
+
+    }
+
     private void detectColission() {
 
         for(int i=0;i<enemies.size();i++){
-            for(int j=0;j<bullets.size();j++){
-                Bullet b=bullets.get(j);
-                Enemy e=enemies.get(i);
-                double cateto1 = b.pos.x-e.x;
-                double cateto2 = b.pos.y-e.y;
-                double distance = Math.sqrt(Math.pow(cateto1,2) + Math.pow(cateto2,2));
-                if(distance < 15){
+            for(int j=0;j<bullets.size();j++) {
+                Bullet b = bullets.get(j);
+                Enemy e = enemies.get(i);
+                double cateto1 = b.pos.x - e.x;
+                double cateto2 = b.pos.y - e.y;
+                double distance = Math.sqrt(Math.pow(cateto1, 2) + Math.pow(cateto2, 2));
+                if (distance < 25) {
                     bullets.remove(j);
-                    sequence(enemies.get(i));
+                    sequence(enemies.get(i).x, enemies.get(i).y);
                     enemies.remove(i);
                     return;
                 }
@@ -268,10 +332,22 @@ public class GameController implements Initializable {
             }else{
                 Bullet bullet = new Bullet(canvas,
                         new Vector(avatar.pos.x , avatar.pos.y),
-                        new Vector(2*avatar.direction.x,2*avatar.direction.y));
+                        new Vector(2*avatar.direction.x,2*avatar.direction.y),1);
                 bullets.add(bullet);
                 avatar.bullets--;
             }
+        }
+        if(keyEvent.getCode()==KeyCode.SHIFT){
+            if(avatar2.bullets!=0){
+                Bullet bullet = new Bullet(canvas,
+                        new Vector(avatar2.pos.x , avatar2.pos.y),
+                        new Vector(2*avatar2.direction.x,2*avatar2.direction.y),2);
+                bullets.add(bullet);
+                avatar2.bullets--;
+            }
+        }
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            avatar2.bullets=6;
         }
     }
 }
