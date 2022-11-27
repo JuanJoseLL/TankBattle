@@ -14,6 +14,7 @@ public class Avatar {
     private GraphicsContext gc;
     private Image tank;
     private Image heart;
+    private Image bullet;
     public Vector pos;
     public Vector direction;
     public int bullets;
@@ -31,6 +32,8 @@ public class Avatar {
         direction = new Vector(2,0);
         String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
         heart = new Image(uri2);
+        String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
+        bullet=new Image(uri3);
     }
     public Avatar(Canvas canvas,int o){
         bullets=6;
@@ -44,7 +47,8 @@ public class Avatar {
         direction = new Vector(2,0);
         String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
         heart = new Image(uri2);
-
+        String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
+        bullet=new Image(uri3);
     }
 
 
@@ -58,17 +62,34 @@ public class Avatar {
             gc.drawImage(heart,-25,-30,10,10);
         }
         if(life>=2){
-            gc.drawImage(heart,-20,-30,10,10);
-        }
-        if(life>=3){
             gc.drawImage(heart,-15,-30,10,10);
         }
+        if(life>=3){
+            gc.drawImage(heart,-5,-30,10,10);
+        }
         if(life>=4){
-            gc.drawImage(heart,-10,-30,10,10);
+            gc.drawImage(heart,5,-30,10,10);
         }
         if (life >= 5) {
-            gc.drawImage(heart, -5, -30, 10, 10);
+            gc.drawImage(heart, 15, -30, 10, 10);
         }
+        //bullets
+        if(bullets>=1){
+            gc.drawImage(bullet,-25,20,10,10);
+        }
+        if(bullets>=2){
+            gc.drawImage(bullet,-15,20,10,10);
+        }
+        if(bullets>=3){
+            gc.drawImage(bullet,-5,20,10,10);
+        }
+        if(bullets>=4){
+            gc.drawImage(bullet,5,20,10,10);
+        }
+        if (bullets >= 5) {
+            gc.drawImage(bullet, 15, 20, 10, 10);
+        }
+
         gc.rotate(90+direction.getAngle());
         gc.drawImage(tank,-25,-25,50,50);
         gc.restore();
