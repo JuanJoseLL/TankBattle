@@ -29,7 +29,7 @@ public class GameController implements Initializable {
     private GraphicsContext gc;
     private boolean isRunning=true;
     private Image[] explode=new Image[3];
-
+    private Image bg;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
     private Avatar avatar;
@@ -63,7 +63,7 @@ public class GameController implements Initializable {
 
 
         avatar = new Avatar(canvas);
-        avatar2 = new Avatar(canvas);
+        avatar2 = new Avatar(canvas,0);
 
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
@@ -72,9 +72,17 @@ public class GameController implements Initializable {
         explode[1]=new Image(uri1);
         explode[2]=new Image(uri2);
 
+        String uri4 = "file:"+ GameMain.class.getResource("davidCalvo.png").getPath();
+        bg = new Image(uri4);
+
         draw();
     }
+    public void drawBackground(){
+        gc.save();
+        gc.drawImage(bg, 0,0, 780,585);
+        gc.restore();
 
+    }
     public void draw() {
         new Thread(
                 () -> {
@@ -87,8 +95,10 @@ public class GameController implements Initializable {
                                 gc.setFill(Color.YELLOW);
                                 gc.fillText("Your`re out of bullets \n Press R to recharge ",canvas.getWidth()/3, canvas.getHeight()/2);
                             }
+                            drawBackground();
                             avatar.draw();
                             avatar2.draw();
+
                             //System.out.println(avatar.pos.x);
                             //System.out.println(avatar.pos.y);
                             //Pintar enemigos

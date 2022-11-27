@@ -25,6 +25,16 @@ public class Avatar {
         direction = new Vector(2,0);
 
     }
+    public Avatar(Canvas canvas,int o){
+        bullets=6;
+        this.canvas=canvas;
+        gc=canvas.getGraphicsContext2D();
+        String uri = "file:"+ GameMain.class.getResource("tank23.png").getPath();
+        tank = new Image(uri);
+        pos = new Vector(100,200);
+        direction = new Vector(2,0);
+
+    }
 
 
     public void draw(){

@@ -15,7 +15,7 @@ public class Enemy {
     public Enemy(Canvas canvas, int x, int y){
         this.canvas = canvas;
         gc = canvas.getGraphicsContext2D();
-        String uri = "file:"+ GameMain.class.getResource("prueba2.png").getPath();
+        String uri = "file:"+ GameMain.class.getResource("tank22.png").getPath();
         tank=new Image(uri);
         this.x = x;
         this.y = y;
