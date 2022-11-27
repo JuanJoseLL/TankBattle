@@ -35,6 +35,7 @@ public class GameController implements Initializable {
     private Avatar avatar;
     private Avatar avatar2;
     private boolean exploding=true;
+    private int cont=0;
     //Estados de las teclas
     boolean Wpressed = false;
     boolean Apressed = false;
@@ -64,7 +65,6 @@ public class GameController implements Initializable {
 
         avatar = new Avatar(canvas);
         avatar2 = new Avatar(canvas,0);
-
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
         String uri2 = "file:"+GameMain.class.getResource("explode2.png").getPath();
@@ -111,6 +111,7 @@ public class GameController implements Initializable {
                                         bullets.get(i).pos.y > canvas.getHeight() + 2 ||
                                         bullets.get(i).pos.y < -20 ||
                                         bullets.get(i).pos.x < -20) {
+
                                     bullets.remove(i);
 
                                 }
@@ -130,6 +131,36 @@ public class GameController implements Initializable {
                 }
         ).start();
     }
+    public void sequence(Enemy a){
+        exploding=true;
+        new Thread(
+                () -> {
+                    while(exploding){
+                        Platform.runLater(()->{
+                            if(cont<50){
+                                gc.drawImage(explode[0],a.x-75,a.y-75,200,200);
+                            }else if (cont > 50 && cont < 100){
+                                gc.drawImage(explode[1],a.x-80,a.y-80,200,200);
+                            }else if(cont > 100){
+                                gc.drawImage(explode[2],a.x-75,a.y-75,200,200);
+                            }
+                            if(cont > 150){
+                                exploding=false;
+                            }
+                        });
+                        try{
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        cont++;
+                    }
+
+                }
+
+        ).start();
+        cont=0;
+    }
     private void detectColission() {
 
         for(int i=0;i<enemies.size();i++){
@@ -141,6 +172,7 @@ public class GameController implements Initializable {
                 double distance = Math.sqrt(Math.pow(cateto1,2) + Math.pow(cateto2,2));
                 if(distance < 15){
                     bullets.remove(j);
+                    sequence(enemies.get(i));
                     enemies.remove(i);
                     return;
                 }
