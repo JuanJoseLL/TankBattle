@@ -56,7 +56,7 @@ public class Avatar {
         gc.save();
         gc.translate(pos.x,pos.y);
         gc.setFont(Font.font(10));
-        gc.setFill(Color.WHEAT);
+        gc.setFill(Color.WHITE);
         gc.fillText(name,-20, -35);
         if(life>=1){
             gc.drawImage(heart,-25,-30,10,10);

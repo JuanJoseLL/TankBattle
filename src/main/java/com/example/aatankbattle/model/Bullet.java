@@ -24,8 +24,7 @@ public class Bullet {
         bullet=new Image(uri);
     }
     public void draw(){
-        //gc.setFill(Color.YELLOW);
-        //gc.fillOval(pos.x-5,pos.y-5,10,10);
+
 
         gc.drawImage(bullet,pos.x-5,pos.y-5,10,10);
         pos.x+=direction.x;

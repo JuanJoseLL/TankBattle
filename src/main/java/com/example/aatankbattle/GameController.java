@@ -30,6 +30,7 @@ public class GameController implements Initializable {
     private boolean isRunning=true;
     private Image[] explode=new Image[3];
     private Image bg;
+    private Image wall;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
     private Avatar avatar;
@@ -74,14 +75,19 @@ public class GameController implements Initializable {
 
         String uri4 = "file:"+ GameMain.class.getResource("davidCalvo.png").getPath();
         bg = new Image(uri4);
-
+        String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
+        wall=new Image(uri5);
         draw();
     }
     public void drawBackground(){
         gc.save();
         gc.drawImage(bg, 0,0, 780,585);
         gc.restore();
-
+    }
+    public void drawWall(){
+        gc.save();
+        gc.drawImage(wall,200,200,75,50);
+        gc.restore();
     }
     public void draw() {
         new Thread(
@@ -89,23 +95,24 @@ public class GameController implements Initializable {
                     while (isRunning) {
                         Platform.runLater(() -> {
 
+                            gc.setFill(Color.BLACK);
+                            gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                            drawBackground();
+                            drawWall();
                             if(enemies.size() == 0 && avatar==null ){
-                                gc.setFont(Font.font(50));
+
+                                gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
                             }
                             if( enemies.size() == 0 && avatar2 == null){
-                                gc.setFont(Font.font(50));
+
+                                gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
                             }
-
-                            gc.setFill(Color.BLACK);
-                            gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
-                            drawBackground();
                             if(avatar!=null){
                                 avatar.draw();
 
@@ -125,8 +132,7 @@ public class GameController implements Initializable {
                             }
 
 
-                            //System.out.println(avatar.pos.x);
-                            //System.out.println(avatar.pos.y);
+
                             //Pintar enemigos
                             for (int i = 0; i < enemies.size(); i++) {
                                 enemies.get(i).draw();
