@@ -267,13 +267,34 @@ public class GameController implements Initializable {
     private void doKeyboardActions() {
         if(avatar!=null){
             if (Wpressed) {
-                avatar.moveForward();
+                if(avatar.pos.x > canvas.getWidth()-15 ){
+                    avatar.pos.x = avatar.pos.x-10;
+                }else if(avatar.pos.y>canvas.getHeight()-15 ){
+                    avatar.pos.y = avatar.pos.y-10;
+                }else if(avatar.pos.x < 10 ){
+                    avatar.pos.x = avatar.pos.x+10;
+                }else if(avatar.pos.y < 10){
+                    avatar.pos.y = avatar.pos.y+10;
+                }else{
+                    avatar.moveForward();
+                }
+
             }
             if (Apressed) {
                 avatar.changeAngle(-3);
             }
             if (Spressed) {
-                avatar.moveBackward();
+                if(avatar.pos.x > canvas.getWidth()-15 ){
+                    avatar.pos.x = avatar.pos.x-10;
+                }else if(avatar.pos.y>canvas.getHeight()-15 ){
+                    avatar.pos.y = avatar.pos.y-10;
+                }else if(avatar.pos.x < 10 ){
+                    avatar.pos.x = avatar.pos.x+10;
+                }else if(avatar.pos.y < 10){
+                    avatar.pos.y = avatar.pos.y+10;
+                }else{
+                    avatar.moveBackward();
+                }
             }
             if (Dpressed) {
                 avatar.changeAngle(3);
@@ -281,13 +302,33 @@ public class GameController implements Initializable {
         }
        if(avatar2!=null){
            if(upPressed){
-               avatar2.moveForward();
+               if(avatar2.pos.x > canvas.getWidth()-15 ){
+                   avatar2.pos.x = avatar2.pos.x-10;
+               }else if(avatar2.pos.y>canvas.getHeight()-15 ){
+                   avatar2.pos.y = avatar2.pos.y-10;
+               }else if(avatar2.pos.x < 10 ){
+                   avatar2.pos.x = avatar2.pos.x+10;
+               }else if(avatar2.pos.y < 10){
+                   avatar2.pos.y = avatar2.pos.y+10;
+               }else{
+                   avatar2.moveForward();
+               }
            }
            if(leftPressed){
                avatar2.changeAngle(-3);
            }
            if(downPressed){
-               avatar2.moveBackward();
+               if(avatar2.pos.x > canvas.getWidth()-15 ){
+                   avatar2.pos.x = avatar2.pos.x-10;
+               }else if(avatar2.pos.y>canvas.getHeight()-15 ){
+                   avatar2.pos.y = avatar2.pos.y-10;
+               }else if(avatar2.pos.x < 10 ){
+                   avatar2.pos.x = avatar2.pos.x+10;
+               }else if(avatar2.pos.y < 10){
+                   avatar2.pos.y = avatar2.pos.y+10;
+               }else{
+                   avatar2.moveBackward();
+               }
            }
            if(rightPressed){
                avatar2.changeAngle(3);
