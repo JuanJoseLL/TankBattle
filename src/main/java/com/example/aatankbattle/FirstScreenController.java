@@ -19,10 +19,8 @@ public class FirstScreenController implements Initializable {
     private Label welcomeText;
     @FXML
     private TextField playerNickname;
-
     @FXML
     private Button primaryButton;
-
     @FXML
     private GraphicsContext gc;
     @FXML
@@ -48,6 +46,7 @@ public class FirstScreenController implements Initializable {
     }
     @FXML
     void press(ActionEvent event) {
+
         GameMain.showWindow("canvasView.fxml");
         Stage current = (Stage) playerNickname.getScene().getWindow();
         current.hide();

@@ -1,9 +1,6 @@
 package com.example.aatankbattle;
 
-import com.example.aatankbattle.model.Avatar;
-import com.example.aatankbattle.model.Bullet;
-import com.example.aatankbattle.model.Enemy;
-import com.example.aatankbattle.model.Vector;
+import com.example.aatankbattle.model.*;
 
 
 import javafx.application.Platform;
@@ -33,6 +30,7 @@ public class GameController implements Initializable {
     private Image wall;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Wall> walls;
     private Avatar avatar;
     private Avatar avatar2;
     private boolean exploding=true;
@@ -54,9 +52,16 @@ public class GameController implements Initializable {
         canvas.setFocusTraversable(true);
 
         //Se generan enemigos en el canvas
-        enemies=new ArrayList<>();
+        enemies = new ArrayList<>();
         enemies.add(new Enemy(canvas,300,100));
         enemies.add(new Enemy(canvas,300,300));
+        walls = new ArrayList<>();
+        walls.add(new Wall(canvas,200,50));
+        walls.add(new Wall(canvas,200,90));
+        walls.add(new Wall(canvas,200,120));
+        walls.add(new Wall(canvas,200,160));
+        walls.add(new Wall(canvas,200,200));
+        walls.add(new Wall(canvas,200,240));
 
         bullets=new ArrayList<>();
 
@@ -98,7 +103,7 @@ public class GameController implements Initializable {
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                             drawBackground();
-                            drawWall();
+                            //drawWall();
                             if(enemies.size() == 0 && avatar==null ){
 
                                 gc.setFont(Font.font(35));
@@ -134,6 +139,9 @@ public class GameController implements Initializable {
 
 
                             //Pintar enemigos
+                            for(int i = 0; i < walls.size(); i++){
+                                walls.get(i).draw();
+                            }
                             for (int i = 0; i < enemies.size(); i++) {
                                 enemies.get(i).draw();
                             }
@@ -151,6 +159,7 @@ public class GameController implements Initializable {
                             }
                             //Colisiones
                             detectColission();
+                            detectWall();
                             detectColissionAvatar();
                             doKeyboardActions();
                         });
@@ -243,6 +252,38 @@ public class GameController implements Initializable {
             }
         }
 
+    }
+    private void detectWall(){
+        for(int i = 0; i < walls.size();i++){
+            Wall e = walls.get(i);
+
+            double distanceAv1=0;
+            double distanceAv2=0;
+
+            if(avatar!=null){
+                double cateto3 = avatar.pos.x - e.x;
+                double cateto4 = avatar.pos.y - e.y;
+                distanceAv1 = Math.sqrt(Math.pow(cateto3, 2) + Math.pow(cateto4, 2));
+            }
+
+            if (avatar2 != null) {
+                double cateto5 = avatar2.pos.x - e.x;
+                double cateto6 = avatar2.pos.y - e.y;
+                distanceAv2 = Math.sqrt(Math.pow(cateto5, 2) + Math.pow(cateto6, 2));
+            }
+
+            if(distanceAv1 < 20){
+                avatar.pos.x-=15;
+
+            }
+            if(distanceAv1 > 20){
+                avatar.pos.x+=15;
+            }
+            if(distanceAv2 < 15){
+
+
+            }
+        }
     }
 
     private void detectColission() {
