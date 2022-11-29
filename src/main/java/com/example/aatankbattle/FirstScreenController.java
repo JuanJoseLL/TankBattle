@@ -37,7 +37,7 @@ public class FirstScreenController implements Initializable {
     }
     public void drawBackground(){
 
-        String uri2 = "file:"+ GameMain.class.getResource("bcn.png").getPath();
+        String uri2 = "file:"+ GameMain.class.getResource("bcnM.jpg").getPath();
         bg = new Image(uri2);
         gc.save();
         gc.drawImage(bg, 0,0, 775,600);

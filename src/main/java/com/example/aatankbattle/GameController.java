@@ -78,7 +78,7 @@ public class GameController implements Initializable {
         explode[1]=new Image(uri1);
         explode[2]=new Image(uri2);
 
-        String uri4 = "file:"+ GameMain.class.getResource("davidCalvo.png").getPath();
+        String uri4 = "file:"+ GameMain.class.getResource("level1D.jpg").getPath();
         bg = new Image(uri4);
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
@@ -276,9 +276,7 @@ public class GameController implements Initializable {
                 avatar.pos.x-=15;
 
             }
-            if(distanceAv1 > 20){
-                avatar.pos.x+=15;
-            }
+
             if(distanceAv2 < 15){
 
 

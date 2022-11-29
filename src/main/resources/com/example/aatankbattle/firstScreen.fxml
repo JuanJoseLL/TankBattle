@@ -13,29 +13,75 @@
     <children>
         <AnchorPane prefHeight="558.0" prefWidth="773.0">
             <Canvas fx:id="canvas" height="584.0" layoutY="-7.0" width="773.0" />
-            <Label layoutX="136.0" layoutY="40.0" prefHeight="125.0" prefWidth="540.0" text="TANKBATTLE" textFill="#027212">
-                <font>
-                    <Font name="Fugaz One" size="79.0" />
-                </font></Label>
-            <Button fx:id="primaryButton" layoutX="309.0" layoutY="285.0" mnemonicParsing="false" onAction="#press" prefHeight="50.0" prefWidth="180.0" style="-fx-background-color: #641E16;" text="Defeat them!" textFill="WHITE">
+            <Button fx:id="primaryButton" layoutX="313.0" layoutY="358.0" mnemonicParsing="false" onAction="#press" prefHeight="42.0" prefWidth="180.0" style="-fx-background-color: #641E16;" text="Defeat them!" textFill="WHITE">
                 <font>
                     <Font name="Calibri" size="21.0" />
                 </font></Button>
-            <TextField fx:id="playerNickname" layoutX="302.0" layoutY="219.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
+            <TextField fx:id="playerNickname" layoutX="162.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
                 <font>
                     <Font name="Calibri Light" size="20.0" />
                 </font>
             </TextField>
-            <Button fx:id="leaderboardBTN" layoutX="613.0" layoutY="485.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #15297c;" text="Leaderboard" textFill="WHITE">
+            <Button fx:id="leaderboardBTN" layoutX="590.0" layoutY="490.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #252440;" text="Leaderboard" textFill="WHITE">
                 <font>
                     <Font name="Calibri" size="21.0" />
                 </font>
             </Button>
-            <Label layoutX="266.0" layoutY="103.0" prefHeight="125.0" prefWidth="281.0" text="Get ready to fight!" textFill="#034d0c">
+            <Label layoutX="259.0" layoutY="98.0" prefHeight="125.0" prefWidth="281.0" text="Get ready to fight!" textFill="#034d0c">
                 <font>
                     <Font name="Agency FB" size="45.0" />
                 </font>
             </Label>
+         <Label layoutX="146.0" layoutY="36.0" prefHeight="125.0" prefWidth="540.0" text="TANKBATTLE" textFill="#bc5b00">
+            <font>
+               <Font name="Fugaz One" size="79.0" />
+            </font>
+         </Label>
+         <Label layoutX="151.0" layoutY="36.0" prefHeight="125.0" prefWidth="540.0" text="TANKBATTLE" textFill="#027212">
+            <font>
+               <Font name="Fugaz One" size="79.0" />
+            </font>
+         </Label>
+         <TextField fx:id="playerNickname1" layoutX="443.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
+            <font>
+               <Font name="Calibri Light" size="20.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="playerNickname2" layoutX="324.0" layoutY="290.0" prefHeight="42.0" prefWidth="157.0" promptText="Enter nickname" style="-fx-background-color: #413e40;">
+            <font>
+               <Font name="Calibri Light" size="20.0" />
+            </font>
+         </TextField>
+         <Label layoutX="208.0" layoutY="198.0" prefHeight="33.0" prefWidth="101.0" text="Player 1" textFill="#bc5b00">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
+         <Label layoutX="210.0" layoutY="198.0" prefHeight="33.0" prefWidth="101.0" text="Player 1" textFill="#027212">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
+         <Label layoutX="489.0" layoutY="198.0" prefHeight="33.0" prefWidth="101.0" text="Player 2" textFill="#bc5b00">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
+         <Label layoutX="491.0" layoutY="198.0" prefHeight="33.0" prefWidth="101.0" text="Player 2" textFill="#027212">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
+         <Label layoutX="378.0" layoutY="257.0" prefHeight="33.0" prefWidth="42.0" text="CPU" textFill="#027212">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
+         <Label layoutX="380.0" layoutY="257.0" prefHeight="33.0" prefWidth="42.0" text="CPU" textFill="#bc5b00">
+            <font>
+               <Font name="Bungee Inline" size="19.0" />
+            </font>
+         </Label>
         </AnchorPane>
     </children>
     <padding>
