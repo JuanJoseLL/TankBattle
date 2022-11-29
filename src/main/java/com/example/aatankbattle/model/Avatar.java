@@ -21,7 +21,7 @@ public class Avatar {
     public int life;
     private String name;
     public Avatar(Canvas canvas){
-        bullets=6;
+        bullets=5;
         life=5;
         name="JuanJo";
         this.canvas=canvas;

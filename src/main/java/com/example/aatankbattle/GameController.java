@@ -13,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
 import java.net.URL;
@@ -56,12 +57,9 @@ public class GameController implements Initializable {
         enemies.add(new Enemy(canvas,300,100));
         enemies.add(new Enemy(canvas,300,300));
         walls = new ArrayList<>();
-        walls.add(new Wall(canvas,200,50));
-        walls.add(new Wall(canvas,200,90));
-        walls.add(new Wall(canvas,200,120));
-        walls.add(new Wall(canvas,200,160));
-        walls.add(new Wall(canvas,200,200));
-        walls.add(new Wall(canvas,200,240));
+
+
+        generateWalls();
 
         bullets=new ArrayList<>();
 
@@ -78,22 +76,57 @@ public class GameController implements Initializable {
         explode[1]=new Image(uri1);
         explode[2]=new Image(uri2);
 
-        String uri4 = "file:"+ GameMain.class.getResource("level1D.jpg").getPath();
+        String uri4 = "file:"+ GameMain.class.getResource("fondo2.jpeg").getPath();
         bg = new Image(uri4);
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
         draw();
+    }
+    public void generateWalls(){
+
+        //Muro vertical izquierdo
+
+        walls.add(new Wall(canvas,150,50));
+        walls.add(new Wall(canvas,150,90));
+        walls.add(new Wall(canvas,150,130));
+        walls.add(new Wall(canvas,150,170));
+        walls.add(new Wall(canvas,150,210));
+        walls.add(new Wall(canvas,150,250));
+
+        //Muro horizontal derecho
+
+        walls.add(new Wall(canvas,400,300));
+        walls.add(new Wall(canvas,430,300));
+        walls.add(new Wall(canvas,460,300));
+        walls.add(new Wall(canvas,490,300));
+        walls.add(new Wall(canvas,520,300));
+        walls.add(new Wall(canvas,550,300));
+
+        //Muro vertical derecho
+
+        walls.add(new Wall(canvas,500,50));
+        walls.add(new Wall(canvas,500,90));
+        walls.add(new Wall(canvas,500,120));
+        walls.add(new Wall(canvas,500,160));
+        walls.add(new Wall(canvas,500,200));
+        walls.add(new Wall(canvas,500,240));
+
+        //Muro diagonal izquierdo
+
+        walls.add(new Wall(canvas,100,400));
+        walls.add(new Wall(canvas,130,360));
+        walls.add(new Wall(canvas,160,320));
+        walls.add(new Wall(canvas,190,280));
+        walls.add(new Wall(canvas,220,240));
+        walls.add(new Wall(canvas,250,200));
+
     }
     public void drawBackground(){
         gc.save();
         gc.drawImage(bg, 0,0, 780,585);
         gc.restore();
     }
-    public void drawWall(){
-        gc.save();
-        gc.drawImage(wall,200,200,75,50);
-        gc.restore();
-    }
+
     public void draw() {
         new Thread(
                 () -> {
@@ -103,7 +136,7 @@ public class GameController implements Initializable {
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                             drawBackground();
-                            //drawWall();
+
                             if(enemies.size() == 0 && avatar==null ){
 
                                 gc.setFont(Font.font(35));
@@ -136,8 +169,6 @@ public class GameController implements Initializable {
                                 }
                             }
 
-
-
                             //Pintar enemigos
                             for(int i = 0; i < walls.size(); i++){
                                 walls.get(i).draw();
@@ -159,7 +190,6 @@ public class GameController implements Initializable {
                             }
                             //Colisiones
                             detectColission();
-                            detectWall();
                             detectColissionAvatar();
                             doKeyboardActions();
                         });
@@ -253,37 +283,6 @@ public class GameController implements Initializable {
         }
 
     }
-    private void detectWall(){
-        for(int i = 0; i < walls.size();i++){
-            Wall e = walls.get(i);
-
-            double distanceAv1=0;
-            double distanceAv2=0;
-
-            if(avatar!=null){
-                double cateto3 = avatar.pos.x - e.x;
-                double cateto4 = avatar.pos.y - e.y;
-                distanceAv1 = Math.sqrt(Math.pow(cateto3, 2) + Math.pow(cateto4, 2));
-            }
-
-            if (avatar2 != null) {
-                double cateto5 = avatar2.pos.x - e.x;
-                double cateto6 = avatar2.pos.y - e.y;
-                distanceAv2 = Math.sqrt(Math.pow(cateto5, 2) + Math.pow(cateto6, 2));
-            }
-
-            if(distanceAv1 < 20){
-                avatar.pos.x-=15;
-
-            }
-
-            if(distanceAv2 < 15){
-
-
-            }
-        }
-    }
-
     private void detectColission() {
 
         for(int i=0;i<enemies.size();i++){
@@ -301,20 +300,38 @@ public class GameController implements Initializable {
                 }
             }
         }
+        for (int i=0;i<walls.size();i++){
+            for (int j=0;j<bullets.size();j++){
+                Bullet b=bullets.get(j);
+                Rectangle w =walls.get(i).getHitbox();
+                if(w.intersects(b.pos.x-15,b.pos.y-15,10,10)){
+                    bullets.remove(j);
+                    sequence(walls.get(i).x+10, walls.get(i).y);
+                    walls.remove(i);
+                    return;
+                }
+            }
+        }
     }
 
     private void doKeyboardActions() {
         if(avatar!=null){
             if (Wpressed) {
-                if(avatar.pos.x > canvas.getWidth()-15 ){
-                    avatar.pos.x = avatar.pos.x-10;
-                }else if(avatar.pos.y>canvas.getHeight()-15 ){
-                    avatar.pos.y = avatar.pos.y-10;
-                }else if(avatar.pos.x < 10 ){
-                    avatar.pos.x = avatar.pos.x+10;
-                }else if(avatar.pos.y < 10){
-                    avatar.pos.y = avatar.pos.y+10;
-                }else{
+                boolean flag = false;
+                for (int i = 0; i < walls.size(); i++) {
+                    if (walls.get(i).getHitbox().intersects(avatar.pos.x + avatar.direction.x -15 , avatar.pos.y + avatar.direction.y -15, 10, 10 )){
+                        flag = true;
+                    }else if(avatar.pos.x > canvas.getWidth()-15 ){
+                        avatar.pos.x = avatar.pos.x-10;
+                    }else if(avatar.pos.y>canvas.getHeight()-15 ){
+                        avatar.pos.y = avatar.pos.y-10;
+                    }else if(avatar.pos.x < 10 ){
+                        avatar.pos.x = avatar.pos.x+10;
+                    }else if(avatar.pos.y < 10) {
+                        avatar.pos.y = avatar.pos.y + 10;
+                    }
+                }
+                if(!flag){
                     avatar.moveForward();
                 }
 
@@ -323,17 +340,24 @@ public class GameController implements Initializable {
                 avatar.changeAngle(-3);
             }
             if (Spressed) {
-                if(avatar.pos.x > canvas.getWidth()-15 ){
-                    avatar.pos.x = avatar.pos.x-10;
-                }else if(avatar.pos.y>canvas.getHeight()-15 ){
-                    avatar.pos.y = avatar.pos.y-10;
-                }else if(avatar.pos.x < 10 ){
-                    avatar.pos.x = avatar.pos.x+10;
-                }else if(avatar.pos.y < 10){
-                    avatar.pos.y = avatar.pos.y+10;
-                }else{
+                boolean flag = false;
+                for (int i = 0; i < walls.size(); i++) {
+                    if (walls.get(i).getHitbox().intersects(avatar.pos.x - avatar.direction.x - 15, avatar.pos.y - avatar.direction.y - 15, 10, 10)) {
+                        flag = true;
+                    } else if (avatar.pos.x > canvas.getWidth() - 15) {
+                        avatar.pos.x = avatar.pos.x - 10;
+                    } else if (avatar.pos.y > canvas.getHeight() - 15) {
+                        avatar.pos.y = avatar.pos.y - 10;
+                    } else if (avatar.pos.x < 10) {
+                        avatar.pos.x = avatar.pos.x + 10;
+                    } else if (avatar.pos.y < 10) {
+                        avatar.pos.y = avatar.pos.y + 10;
+                    }
+                }
+                if(!flag){
                     avatar.moveBackward();
                 }
+
             }
             if (Dpressed) {
                 avatar.changeAngle(3);
