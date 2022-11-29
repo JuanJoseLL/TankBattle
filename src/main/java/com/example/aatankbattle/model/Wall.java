@@ -25,7 +25,7 @@ public class Wall {
         life=4;
     }
     public void draw(){
-        hitbox=new Rectangle(x,y,30,30);
+        hitbox=new Rectangle(x,y,60,40);
 
         if(life==3){
             String uri="file:"+ GameMain.class.getResource("muro2.png").getPath();
@@ -39,7 +39,6 @@ public class Wall {
             String uri="file:"+ GameMain.class.getResource("muro4.png").getPath();
             wall=new Image(uri);
         }
-
         gc.drawImage(wall,x-15,y-15,120,90);
 
     }

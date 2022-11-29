@@ -89,29 +89,29 @@ public class GameController implements Initializable {
         //Muro vertical izquierdo
 
         walls.add(new Wall(canvas,150,50));
-        walls.add(new Wall(canvas,150,90));
-        walls.add(new Wall(canvas,150,130));
-        walls.add(new Wall(canvas,150,170));
-        walls.add(new Wall(canvas,150,210));
-        walls.add(new Wall(canvas,150,250));
+        walls.add(new Wall(canvas,150,88));
+        walls.add(new Wall(canvas,150,125));
+        walls.add(new Wall(canvas,150,162));
+        walls.add(new Wall(canvas,150,200));
+        walls.add(new Wall(canvas,150,238));
 
         //Muro horizontal derecho
 
         walls.add(new Wall(canvas,400,300));
-        walls.add(new Wall(canvas,430,300));
-        walls.add(new Wall(canvas,460,300));
-        walls.add(new Wall(canvas,490,300));
-        walls.add(new Wall(canvas,520,300));
-        walls.add(new Wall(canvas,550,300));
+        walls.add(new Wall(canvas,425,300));
+        walls.add(new Wall(canvas,452,300));
+        walls.add(new Wall(canvas,480,300));
+        walls.add(new Wall(canvas,508,300));
+        walls.add(new Wall(canvas,536,300));
 
         //Muro vertical derecho
 
         walls.add(new Wall(canvas,500,50));
-        walls.add(new Wall(canvas,500,90));
+        walls.add(new Wall(canvas,500,85));
         walls.add(new Wall(canvas,500,120));
-        walls.add(new Wall(canvas,500,160));
-        walls.add(new Wall(canvas,500,200));
-        walls.add(new Wall(canvas,500,240));
+        walls.add(new Wall(canvas,500,155));
+        walls.add(new Wall(canvas,500,190));
+        walls.add(new Wall(canvas,500,227));
 
         //Muro diagonal izquierdo
 
@@ -124,11 +124,11 @@ public class GameController implements Initializable {
 
         //Muro vertical derecho abajo
         walls.add(new Wall(canvas,300,400+100));
-        walls.add(new Wall(canvas,300,360+100));
-        walls.add(new Wall(canvas,300,320+100));
-        walls.add(new Wall(canvas,300,280+100));
-        walls.add(new Wall(canvas,300,240+100));
-        walls.add(new Wall(canvas,300,200+100));
+        walls.add(new Wall(canvas,300,365+100));
+        walls.add(new Wall(canvas,300,327+100));
+        walls.add(new Wall(canvas,300,290+100));
+        walls.add(new Wall(canvas,300,253+100));
+        walls.add(new Wall(canvas,300,215+100));
 
     }
     public void drawBackground(){
