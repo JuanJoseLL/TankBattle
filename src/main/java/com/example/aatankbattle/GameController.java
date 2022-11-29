@@ -69,6 +69,8 @@ public class GameController implements Initializable {
 
         avatar = new Avatar(canvas);
         avatar2 = new Avatar(canvas,0);
+
+
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
         String uri2 = "file:"+GameMain.class.getResource("explode2.png").getPath();
@@ -314,7 +316,7 @@ public class GameController implements Initializable {
                 Rectangle w =walls.get(i).getHitbox();
                 if(w.intersects(b.pos.x-15,b.pos.y-15,10,10)){
                     bullets.remove(j);
-                    sequence(walls.get(i).x+10, walls.get(i).y);
+                    sequence(walls.get(i).x+20, walls.get(i).y+10);
                     walls.get(i).life--;
                     if(walls.get(i).life==0){
                         walls.remove(i);
