@@ -18,7 +18,12 @@ public class FirstScreenController implements Initializable {
     @FXML
     private Label welcomeText;
     @FXML
-    private TextField playerNickname;
+    private TextField playerNickname1;
+    @FXML
+    private TextField playerNickname2;
+
+    @FXML
+    private TextField CPU;
     @FXML
     private Button primaryButton;
     @FXML
@@ -29,12 +34,16 @@ public class FirstScreenController implements Initializable {
     private Image wall;
     @FXML
     private Canvas canvas;
+
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
         drawBackground();
     }
+
     public void drawBackground(){
 
         String uri2 = "file:"+ GameMain.class.getResource("fondo1.jpeg").getPath();
@@ -46,9 +55,15 @@ public class FirstScreenController implements Initializable {
     }
     @FXML
     void press(ActionEvent event) {
-
         GameMain.showWindow("canvasView.fxml");
-        Stage current = (Stage) playerNickname.getScene().getWindow();
+        Stage current = (Stage) playerNickname1.getScene().getWindow();
+        current.hide();
+    }
+    @FXML
+    void pressS(ActionEvent event) {
+
+        GameMain.showWindow("scoreBoard.fxml");
+        Stage current = (Stage) playerNickname1.getScene().getWindow();
         current.hide();
     }
 }

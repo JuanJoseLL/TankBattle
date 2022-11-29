@@ -17,12 +17,12 @@
                 <font>
                     <Font name="Calibri" size="21.0" />
                 </font></Button>
-            <TextField fx:id="playerNickname" layoutX="162.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
+            <TextField fx:id="playerNickname1" layoutX="162.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
                 <font>
                     <Font name="Calibri Light" size="20.0" />
                 </font>
             </TextField>
-            <Button fx:id="leaderboardBTN" layoutX="590.0" layoutY="490.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #252440;" text="Leaderboard" textFill="WHITE">
+            <Button fx:id="leaderboardBTN" layoutX="590.0" layoutY="490.0" mnemonicParsing="false" onAction="#pressS" prefHeight="42.0" prefWidth="146.0" style="-fx-background-color: #252440;" text="Leaderboard" textFill="WHITE">
                 <font>
                     <Font name="Calibri" size="21.0" />
                 </font>
@@ -42,12 +42,12 @@
                <Font name="Fugaz One" size="79.0" />
             </font>
          </Label>
-         <TextField fx:id="playerNickname1" layoutX="443.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
+         <TextField fx:id="playerNickname2" layoutX="443.0" layoutY="231.0" prefHeight="42.0" prefWidth="194.0" promptText="Enter your nickname" style="-fx-background-color: #413e40;">
             <font>
                <Font name="Calibri Light" size="20.0" />
             </font>
          </TextField>
-         <TextField fx:id="playerNickname2" layoutX="324.0" layoutY="290.0" prefHeight="42.0" prefWidth="157.0" promptText="Enter nickname" style="-fx-background-color: #413e40;">
+         <TextField fx:id="CPU" layoutX="324.0" layoutY="290.0" prefHeight="42.0" prefWidth="157.0" promptText="Enter nickname" style="-fx-background-color: #413e40;">
             <font>
                <Font name="Calibri Light" size="20.0" />
             </font>

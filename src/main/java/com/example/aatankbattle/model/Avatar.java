@@ -20,6 +20,7 @@ public class Avatar {
     public int bullets;
     public int life;
     private String name;
+
     public Avatar(Canvas canvas){
         bullets=5;
         life=5;
@@ -119,4 +120,5 @@ public class Avatar {
     public String getName() {
         return name;
     }
+
 }

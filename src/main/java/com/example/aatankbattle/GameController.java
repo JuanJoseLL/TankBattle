@@ -16,6 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import javax.sound.sampled.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -46,9 +49,16 @@ public class GameController implements Initializable {
     boolean downPressed = false;
     boolean rightPressed = false;
     boolean leftPressed = false;
+    private ScoreBoardController scoreBoardController;
+    public int hitsP1=0;
+    public int hitsP2=0;
+
+    File path1= new File("C://Users//Sara Cardona//Downloads//tank_shot-_online-audio-converter.com_.wav/");
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
 
@@ -82,6 +92,22 @@ public class GameController implements Initializable {
         bg = new Image(uri4);
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
+        if(path1.exists()){
+            try {
+                AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                Clip clip= AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.start();
+            } catch (UnsupportedAudioFileException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            }
+        }else{
+            System.out.println("No existe");
+        }
         draw();
     }
     public void generateWalls(){
@@ -151,6 +177,8 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
+                                int vic=scoreBoardController.search(avatar.getName())+1;
+                                scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
                             }
@@ -158,6 +186,8 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
+                                int vic=scoreBoardController.search(avatar.getName())+1;
+                                scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
                             }
@@ -440,6 +470,7 @@ public class GameController implements Initializable {
         }
     }
     private void onKeyPressed(KeyEvent keyEvent) {
+        boolean flag;
 
         if (keyEvent.getCode() == KeyCode.W) {
             Wpressed = true;
@@ -470,7 +501,22 @@ public class GameController implements Initializable {
         }
         if (keyEvent.getCode()==KeyCode.SPACE){
             if(avatar.bullets==0){
-
+                if(path1.exists()){
+                    try {
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                        Clip clip= AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("No existe");
+                }
             }else{
                 Bullet bullet = new Bullet(canvas,
                         new Vector(avatar.pos.x , avatar.pos.y),
@@ -491,5 +537,6 @@ public class GameController implements Initializable {
         if(keyEvent.getCode() == KeyCode.ENTER){
             avatar2.bullets=6;
         }
+
     }
 }
