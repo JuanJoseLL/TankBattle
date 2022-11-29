@@ -18,15 +18,27 @@ public class Wall {
     public Wall(Canvas canvas,int x,int y){
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
-        String uri="file:"+ GameMain.class.getResource("muro.png").getPath();
+        String uri="file:"+ GameMain.class.getResource("muro1.png").getPath();
         wall=new Image(uri);
         this.x=x;
         this.y=y;
-        life=3;
+        life=4;
     }
     public void draw(){
         hitbox=new Rectangle(x,y,60,40);
-        gc.drawImage(wall,x,y,70,50);
+        if(life==3){
+            String uri="file:"+ GameMain.class.getResource("muro2.png").getPath();
+            wall=new Image(uri);
+        }
+        if(life==2){
+            String uri="file:"+ GameMain.class.getResource("muro3.png").getPath();
+            wall=new Image(uri);
+        }
+        if(life==1){
+            String uri="file:"+ GameMain.class.getResource("muro4.png").getPath();
+            wall=new Image(uri);
+        }
+        gc.drawImage(wall,x,y,120,110);
 
     }
 

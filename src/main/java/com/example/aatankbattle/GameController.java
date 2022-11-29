@@ -120,6 +120,14 @@ public class GameController implements Initializable {
         walls.add(new Wall(canvas,220,240));
         walls.add(new Wall(canvas,250,200));
 
+        //Muro vertical derecho abajo
+        walls.add(new Wall(canvas,300,400+100));
+        walls.add(new Wall(canvas,300,360+100));
+        walls.add(new Wall(canvas,300,320+100));
+        walls.add(new Wall(canvas,300,280+100));
+        walls.add(new Wall(canvas,300,240+100));
+        walls.add(new Wall(canvas,300,200+100));
+
     }
     public void drawBackground(){
         gc.save();
@@ -307,7 +315,10 @@ public class GameController implements Initializable {
                 if(w.intersects(b.pos.x-15,b.pos.y-15,10,10)){
                     bullets.remove(j);
                     sequence(walls.get(i).x+10, walls.get(i).y);
-                    walls.remove(i);
+                    walls.get(i).life--;
+                    if(walls.get(i).life==0){
+                        walls.remove(i);
+                    }
                     return;
                 }
             }
