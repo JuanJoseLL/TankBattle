@@ -95,15 +95,10 @@ public class ScoreBoardController  implements Initializable{
                 canvas.setFocusTraversable(true);
                 updateSb();
                 drawBackground();
-                /*Scoreboard.getInstance().insert(new Avatar("san", 5));
-                Scoreboard.getInstance().insert(new Avatar("jua", 3));
-                Scoreboard.getInstance().insert(new Avatar("ana", 6));
-                Scoreboard.getInstance().insert(new Avatar("mat", 2));
-                Scoreboard.getInstance().insert(new Avatar("mat", 2));*/
 
         }
-       public void drawBackground(){
-                String uri2 = "file:"+ GameMain.class.getResource("bcn.png").getPath();
+        public void drawBackground(){
+                String uri2 = "file:"+ GameMain.class.getResource("bcgd.jpg").getPath();
                 bg = new Image(uri2);
                 gc.save();
                 gc.drawImage(bg, 0,0, 773,549);
@@ -111,12 +106,12 @@ public class ScoreBoardController  implements Initializable{
 
         }
 
-    @FXML
-    void returnM(ActionEvent event) {
-            GameMain.showWindow("firstScreen.fxml");
-            Stage current = (Stage) score9.getScene().getWindow();
-            current.hide();
-    }
+        @FXML
+        void returnM(ActionEvent event) {
+                GameMain.showWindow("firstScreen.fxml");
+                Stage current = (Stage) score9.getScene().getWindow();
+                current.hide();
+        }
 
         public void arr(String name, int victories){
                 avatar=new Avatar(name,victories);

@@ -172,7 +172,6 @@ public class GameController implements Initializable {
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
-
                                 GameMain.showWindow("scoreBoard.fxml");
                                 Stage current = (Stage) canvas.getScene().getWindow();
                                 current.hide();
@@ -185,7 +184,7 @@ public class GameController implements Initializable {
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
-                                GameMain.showWindow("scoreBoard.fxml");
+                                GameMain.showWindow("winCanva.fxml");
                                 Stage current = (Stage) canvas.getScene().getWindow();
                                 current.hide();
                             }
