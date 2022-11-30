@@ -15,6 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -83,8 +84,8 @@ public class GameController implements Initializable {
         avatar = new Avatar(canvas);
         avatar2 = new Avatar(canvas,0);
 
-        avatar.setName(Singleton.getInstance().player1.getName());
-        avatar2.setName(Singleton.getInstance().player2.getName());
+        avatar.setName(Player.getInstance().player1.getName());
+        avatar2.setName(Player.getInstance().player2.getName());
 
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
@@ -170,7 +171,11 @@ public class GameController implements Initializable {
                                 int vic=scoreBoardController.search(avatar.getName())+1;
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
+                                isRunning=false;
 
+                                GameMain.showWindow("scoreBoard.fxml");
+                                Stage current = (Stage) canvas.getScene().getWindow();
+                                current.hide();
                             }
                             if( enemies.size() == 0 && avatar2 == null){
 
@@ -179,7 +184,10 @@ public class GameController implements Initializable {
                                 int vic=scoreBoardController.search(avatar.getName())+1;
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
-
+                                isRunning=false;
+                                GameMain.showWindow("scoreBoard.fxml");
+                                Stage current = (Stage) canvas.getScene().getWindow();
+                                current.hide();
                             }
                             if(avatar!=null){
                                 avatar.draw();

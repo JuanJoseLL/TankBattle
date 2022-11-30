@@ -12,6 +12,8 @@ import javafx.scene.text.Font;
 public class Avatar {
     private Canvas canvas;
     private GraphicsContext gc;
+    private Avatar left;
+    private Avatar right;
     private Image tank;
     private Image heart;
     private Image bullet;
@@ -54,7 +56,7 @@ public class Avatar {
         life = 5;
     }
     public Avatar(Canvas canvas,int o){
-        name=Singleton.getInstance().player1.getName();
+        name= Player.getInstance().player1.getName();
         bullets=6;
         life=5;
         this.canvas=canvas;
@@ -152,5 +154,21 @@ public class Avatar {
 
     public void setWins(int wins) {
         this.wins = wins;
+    }
+
+    public Avatar getLeft() {
+        return left;
+    }
+
+    public void setLeft(Avatar left) {
+        this.left = left;
+    }
+
+    public Avatar getRight() {
+        return right;
+    }
+
+    public void setRight(Avatar right) {
+        this.right = right;
     }
 }

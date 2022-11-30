@@ -1,6 +1,6 @@
 package com.example.aatankbattle;
 
-import com.example.aatankbattle.model.Singleton;
+import com.example.aatankbattle.model.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,7 +58,7 @@ public class FirstScreenController implements Initializable {
     }
     @FXML
     void press(ActionEvent event) {
-        Singleton.getInstance().createPlayers(playerNickname1.getText(), playerNickname2.getText(),CPU.getText());
+        Player.getInstance().createPlayers(playerNickname1.getText(), playerNickname2.getText(),CPU.getText());
         GameMain.showWindow("canvasView.fxml");
         Stage current = (Stage) playerNickname1.getScene().getWindow();
         current.hide();

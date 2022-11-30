@@ -1,32 +1,43 @@
 package com.example.aatankbattle.model;
 
-import javafx.scene.Node;
-
 public class Player {
-    private String name;
-    private int victories;
+        private static Player instance;
 
-    public Player(int type) {
+        public Avatar player1;
+        public Avatar player2;
+        public Enemy player3;
 
-    }
-    public Player(String name, int victories){
-        this.name=name;
-        this.victories=victories;
-    }
+        private Player(){
+            this.player1=new Avatar(1);
+            this.player2=new Avatar(2);
+            this.player3=new Enemy();
+        }
 
-    public String getName() {
-        return name;
-    }
+        public static Player getInstance(){
+            if(instance==null){
+                instance= new Player();
+            }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+            return instance;
+        }
+        public void createPlayers(String name1,String name2,String name3){
+            this.player1.setName(name1);
+            this.player2.setName(name2);
+            this.player3.setName(name3);
+        }
 
-    public int getVictories() {
-        return victories;
-    }
+        public Avatar getPlayer1(){
+            return player1;
+        }
 
-    public void setVictories(int victories) {
-        this.victories = victories;
-    }
+        public void setPlayer1(Avatar player1){
+            this.player1= player1;
+        }
+
+        public Avatar getPlayer2(){return player2;}
+
+        public void setPlayer2(Avatar player2){
+            this.player2= player2;
+        }
+
 }

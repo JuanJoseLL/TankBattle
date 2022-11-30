@@ -14,7 +14,6 @@ public class GameMain extends Application {
         showWindow("firstScreen.fxml");
     }
 
-
     public static void showWindow(String fxml){
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(GameMain.class.getResource(fxml));
