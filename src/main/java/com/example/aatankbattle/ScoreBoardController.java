@@ -117,8 +117,8 @@ public class ScoreBoardController  implements Initializable{
 
 
         public void updateSb(){
+                Scoreboard.getInstance().loadData();
                 ArrayList<Avatar> avatars = Scoreboard.getInstance().getAvatars();
-
                 if(avatars.size()>=1 && avatars.get(0)!=null){
                         name1.setText(avatars.get(0).getName());
                         score1.setText(String.valueOf(avatars.get(0).getWins()));
@@ -159,27 +159,9 @@ public class ScoreBoardController  implements Initializable{
                         name10.setText(avatars.get(9).getName());
                         score10.setText(String.valueOf(avatars.get(9).getWins()));
                 }
-                saveData();
 
         }
 
-        public void saveData(){
-                ArrayList<Avatar> avatars = Scoreboard.getInstance().getAvatars();
-                try {
-                        FileOutputStream fos = new FileOutputStream(new File("playerScore.txt"));
-                        for (int i = 0; i < avatars.size(); i++) {
-                                String win= String.valueOf(avatars.get(i).getWins());
-                                fos.write(avatars.get(i).getName().getBytes(StandardCharsets.UTF_8));
-                                fos.write(",".getBytes(StandardCharsets.UTF_8));
-                                fos.write( win.getBytes(StandardCharsets.UTF_8));
-                                fos.write("\n".getBytes(StandardCharsets.UTF_8));
-                        }
-                        fos.close();
-                } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
-        }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.aatankbattle.model;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,7 +53,7 @@ public class Scoreboard {
         });
         System.out.println(avatars);
         Collections.reverse(avatars);
-
+        saveData();
     }
     public Avatar search(Avatar p){
         for(Avatar x : avatars){
@@ -65,20 +66,6 @@ public class Scoreboard {
     public void wonAGame(Avatar p){
         p.setWins(p.getWins()+1);
     }
-    /*public ArrayList<Avatar> printScore(Avatar current, int n) {
-        if (current == null) {
-            return avatars;
-        }
-        printScore(current.getRight(), n);
-        avatars.add(new Avatar(current.getName(), current.getWins()));
-        n++;
-        System.out.println(avatars.size());
-        return printScore(current.getLeft(), n);
-    }
-    public ArrayList<Avatar> updateLeaderboard(){
-        avatars.clear();
-        return printScore(root, 1);
-    }*/
 
     public ArrayList<Avatar> getAvatars() {
         return avatars;
@@ -86,5 +73,23 @@ public class Scoreboard {
 
     public void setAvatars(ArrayList<Avatar> avatars) {
         this.avatars = avatars;
+    }
+    public void saveData(){
+
+        try {
+            FileOutputStream fos = new FileOutputStream(new File("playerScore.txt"));
+            for (int i = 0; i < avatars.size(); i++) {
+                String win= String.valueOf(avatars.get(i).getWins());
+                fos.write(avatars.get(i).getName().getBytes(StandardCharsets.UTF_8));
+                fos.write(",".getBytes(StandardCharsets.UTF_8));
+                fos.write( win.getBytes(StandardCharsets.UTF_8));
+                fos.write("\n".getBytes(StandardCharsets.UTF_8));
+            }
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

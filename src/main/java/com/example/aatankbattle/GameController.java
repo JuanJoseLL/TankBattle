@@ -20,10 +20,10 @@ import javafx.stage.Stage;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
-import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Random;
 
 public class GameController implements Initializable {
 
@@ -34,11 +34,12 @@ public class GameController implements Initializable {
     private Image[] explode=new Image[3];
     private Image bg;
     private Image wall;
-    private ArrayList<Enemy> enemies;
+    private ArrayList<Avatar> enemies;
     private ArrayList<Bullet> bullets;
     private ArrayList<Wall> walls;
     private Avatar avatar;
     private Avatar avatar2;
+    private Avatar enemy;
     private boolean exploding=true;
     private int cont=0;
     //Estados de las teclas
@@ -71,7 +72,7 @@ public class GameController implements Initializable {
 
         //Se generan enemigos en el canvas
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(canvas,300,100));
+        enemies.add(new Avatar(canvas,0,0));
         walls = new ArrayList<>();
 
 
@@ -85,10 +86,12 @@ public class GameController implements Initializable {
 
         avatar = new Avatar(canvas);
         avatar2 = new Avatar(canvas,0);
+        enemy=new Avatar(canvas,0,0);
 
         avatar.setName(Player.getInstance().player1.getName());
         avatar2.setName(Player.getInstance().player2.getName());
-        enemies.get(0).setName(Player.getInstance().player3.getName());
+        enemy.setName(Player.getInstance().player3.getName());
+
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
         String uri2 = "file:"+GameMain.class.getResource("explode2.png").getPath();
@@ -96,11 +99,27 @@ public class GameController implements Initializable {
         explode[1]=new Image(uri1);
         explode[2]=new Image(uri2);
 
-        String uri4 = "file:"+ GameMain.class.getResource("fondo2.jpeg").getPath();
-        bg = new Image(uri4);
+        String fondo="";
+        int random = (int) (Math.floor(Math.random()*(4-1)+1));
+        if(random==1){
+            String uri4 = "file:"+ GameMain.class.getResource("fondo2.jpg").getPath();
+            bg = new Image(uri4);
+        } else if (random==2) {
+            String uri4 = "file:"+ GameMain.class.getResource("fondo3.jpg").getPath();
+            bg = new Image(uri4);
+        } else if (random==3) {
+            String uri4 = "file:"+ GameMain.class.getResource("fondo4.jpg").getPath();
+            bg = new Image(uri4);
+        }else{
+            String uri4 = "file:"+ GameMain.class.getResource("fondo1.jpg").getPath();
+            bg = new Image(uri4);
+        }
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
         draw();
+        drawBot();
+        //attack();
+
     }
 
     public void generateWalls(){
@@ -161,20 +180,17 @@ public class GameController implements Initializable {
                 () -> {
                     while (isRunning) {
                         Platform.runLater(() -> {
-
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                             drawBackground();
-
                             if(enemies.size() == 0 && avatar==null ){
-
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
                                 avatar2.setWins(avatar2.getWins()+1);
-                                Scoreboard.getInstance().insert(avatar2);
+                                scoreboard.insert(avatar2);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
-                                GameMain.showWindow("winCanva.fxml");
+                                GameMain.showWindow("scoreBoard.fxml");
                                 Stage current = (Stage) canvas.getScene().getWindow();
                                 current.hide();
                             }
@@ -183,8 +199,20 @@ public class GameController implements Initializable {
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
                                 avatar.setWins(avatar.getWins()+1);
-                                Scoreboard.getInstance().insert(avatar);
+                                scoreboard.insert(avatar);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
+                                isRunning=false;
+                                GameMain.showWindow("winCanva.fxml");
+                                Stage current = (Stage) canvas.getScene().getWindow();
+                                current.hide();
+                            }
+                            if( enemies.size() != 0 && avatar2 == null && avatar==null){
+
+                                gc.setFont(Font.font(35));
+                                gc.setFill(Color.YELLOW);
+                                avatar.setWins(avatar.getWins()+1);
+                                scoreboard.insert(enemy);
+                                gc.fillText(avatar.getName()+" \n  won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
                                 GameMain.showWindow("winCanva.fxml");
                                 Stage current = (Stage) canvas.getScene().getWindow();
@@ -213,7 +241,7 @@ public class GameController implements Initializable {
                                 walls.get(i).draw();
                             }
                             for (int i = 0; i < enemies.size(); i++) {
-                                enemies.get(i).draw();
+                                enemies.get(i).drawEnemy();
                             }
                             for (int i = 0; i < bullets.size(); i++) {
                                 bullets.get(i).draw();
@@ -228,10 +256,11 @@ public class GameController implements Initializable {
 
                             }
                             //Colisiones
-                            movementBot();
                             detectColission();
+
                             detectColissionAvatar();
                             doKeyboardActions();
+                            keyboardActionEnemy();
                         });
                         //Sleep
                         try {
@@ -243,7 +272,85 @@ public class GameController implements Initializable {
                 }
         ).start();
     }
+    public void drawBot() {
 
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).changeAngle(45);
+        }
+
+        final boolean[] flag = {true};
+        new Thread(
+                () -> {
+                    while (isRunning) {
+                        Platform.runLater(() -> {
+                            for (int i = 0; i < enemies.size(); i++) {
+
+                                Avatar bot = enemies.get(i);
+
+                                bot.moveForward();
+
+                                if (bot.pos.y >= 180) {
+                                    bot.pos.y = 179;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.x <= 220) {
+                                    bot.pos.x = 221;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.y <= 71) {
+                                    bot.pos.y = 72;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.x >= 490) {
+                                    bot.pos.x = 489;
+                                    bot.changeAngle(90);
+                                }
+
+                            }
+
+                        });
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+        ).start();
+    }
+    public void keyboardActionEnemy(){
+        if(enemy !=null){
+            if(enemy.pos.x > canvas.getWidth()-15 ){
+                enemy.pos.x = enemy.pos.x-10;
+            }else if(enemy.pos.y>canvas.getHeight()-15 ){
+                enemy.pos.y = enemy.pos.y-10;
+            }else if(enemy.pos.x < 10 ){
+                enemy.pos.x = enemy.pos.x+10;
+            }else if(enemy.pos.y < 10){
+                enemy.pos.y = enemy.pos.y+10;
+            }else{
+                enemy.moveForward();
+            }
+            boolean flag2 = false;
+            for (int f = 0; f < walls.size(); f++) {
+                if (walls.get(f).getHitbox().intersects(enemy.pos.x - enemy.direction.x - 15, enemy.pos.y - enemy.direction.y - 15, 10, 10)) {
+                    flag2 = true;
+                } else if (enemy.pos.x > canvas.getWidth() - 15) {
+                    enemy.pos.x = enemy.pos.x - 10;
+                } else if (enemy.pos.y > canvas.getHeight() - 15) {
+                    enemy.pos.y = enemy.pos.y - 10;
+                } else if (enemy.pos.x < 10) {
+                    enemy.pos.x = enemy.pos.x + 10;
+                } else if (enemy.pos.y < 10) {
+                    enemy.pos.y = enemy.pos.y + 10;
+                }
+            }
+            if(!flag2){
+                enemy.moveBackward();
+            }
+        }
+
+    }
 
     public void sequence(double x,double y){
         exploding=true;
@@ -280,6 +387,7 @@ public class GameController implements Initializable {
             Bullet b=bullets.get(i);
             double distanceAv2 = 0;
             double distanceAv1 = 0;
+            double distanceAv3 = 0;
             if(avatar!=null){
                 double cateto3 = b.pos.x - avatar.pos.x;
                 double cateto4 = b.pos.y - avatar.pos.y;
@@ -290,6 +398,11 @@ public class GameController implements Initializable {
                 double cateto5 = b.pos.x - avatar2.pos.x;
                 double cateto6 = b.pos.y - avatar2.pos.y;
                 distanceAv2 = Math.sqrt(Math.pow(cateto5, 2) + Math.pow(cateto6, 2));
+            }
+            if (enemy != null) {
+                double cateto7 = b.pos.x - enemy.pos.x;
+                double cateto8 = b.pos.y - enemy.pos.y;
+                distanceAv3 = Math.sqrt(Math.pow(cateto7, 2) + Math.pow(cateto8, 2));
             }
 
             if (distanceAv1 < 25 && b.getPlayer() != 1) {
@@ -320,6 +433,20 @@ public class GameController implements Initializable {
                 }
 
             }
+            if (distanceAv3 < 25) {
+                if(enemy!=null){
+                    sequence(enemy.pos.x-15, enemy.pos.y-15);
+                    System.out.println("hit al enemy 2");
+                    bullets.remove(i);
+                    enemy.life--;
+                    System.out.println(enemy.life);
+                    if (enemy.life == 0) {
+                        enemy = null;
+                    }
+                    return;
+                }
+
+            }
         }
 
     }
@@ -328,14 +455,17 @@ public class GameController implements Initializable {
         for(int i=0;i<enemies.size();i++){
             for(int j=0;j<bullets.size();j++) {
                 Bullet b = bullets.get(j);
-                Enemy e = enemies.get(i);
-                double cateto1 = b.pos.x - e.x;
-                double cateto2 = b.pos.y - e.y;
+                Avatar e = enemies.get(i);
+                double cateto1 = b.pos.x - e.pos.x;
+                double cateto2 = b.pos.y - e.pos.y;
                 double distance = Math.sqrt(Math.pow(cateto1, 2) + Math.pow(cateto2, 2));
                 if (distance < 25) {
                     bullets.remove(j);
-                    sequence(enemies.get(i).x, enemies.get(i).y);
-                    enemies.remove(i);
+                    sequence(enemies.get(i).pos.x, enemies.get(i).pos.y);
+                    enemies.get(i).life--;
+                    if(enemies.get(i).life==0){
+                        enemies.remove(i);
+                    }
                     return;
                 }
             }
@@ -407,16 +537,23 @@ public class GameController implements Initializable {
             }
         }
        if(avatar2!=null){
-           if(upPressed){
-               if(avatar2.pos.x > canvas.getWidth()-15 ){
-                   avatar2.pos.x = avatar2.pos.x-10;
-               }else if(avatar2.pos.y>canvas.getHeight()-15 ){
-                   avatar2.pos.y = avatar2.pos.y-10;
-               }else if(avatar2.pos.x < 10 ){
-                   avatar2.pos.x = avatar2.pos.x+10;
-               }else if(avatar2.pos.y < 10){
-                   avatar2.pos.y = avatar2.pos.y+10;
-               }else{
+           if(upPressed) {
+               boolean flag=false;
+               for (int i = 0; i < walls.size(); i++) {
+                   if (walls.get(i).getHitbox().intersects(avatar2.pos.x + avatar2.direction.x - 15, avatar2.pos.y + avatar2.direction.y - 15, 10, 10)) {
+                       flag = true;
+                   } else if (avatar2.pos.x > canvas.getWidth() - 15) {
+                       avatar2.pos.x = avatar2.pos.x - 10;
+                   } else if (avatar2.pos.y > canvas.getHeight() - 15) {
+                       avatar2.pos.y = avatar2.pos.y - 10;
+                   } else if (avatar2.pos.x < 10) {
+                       avatar2.pos.x = avatar2.pos.x + 10;
+                   } else if (avatar2.pos.y < 10) {
+                       avatar2.pos.y = avatar2.pos.y + 10;
+                   }
+
+               }
+               if(!flag){
                    avatar2.moveForward();
                }
            }
@@ -424,46 +561,30 @@ public class GameController implements Initializable {
                avatar2.changeAngle(-3);
            }
            if(downPressed){
-               if(avatar2.pos.x > canvas.getWidth()-15 ){
-                   avatar2.pos.x = avatar2.pos.x-10;
-               }else if(avatar2.pos.y>canvas.getHeight()-15 ){
-                   avatar2.pos.y = avatar2.pos.y-10;
-               }else if(avatar2.pos.x < 10 ){
-                   avatar2.pos.x = avatar2.pos.x+10;
-               }else if(avatar2.pos.y < 10){
-                   avatar2.pos.y = avatar2.pos.y+10;
-               }else{
+               boolean flag=false;
+               for (int i = 0; i < walls.size(); i++) {
+                   if (walls.get(i).getHitbox().intersects(avatar2.pos.x - avatar2.direction.x - 15, avatar2.pos.y - avatar2.direction.y - 15, 10, 10)) {
+                       flag = true;
+                   }  else if(avatar2.pos.x > canvas.getWidth()-15 ){
+                       avatar2.pos.x = avatar2.pos.x-10;
+                   }else if(avatar2.pos.y>canvas.getHeight()-15 ){
+                       avatar2.pos.y = avatar2.pos.y-10;
+                   }else if(avatar2.pos.x < 10 ){
+                       avatar2.pos.x = avatar2.pos.x+10;
+                   }else if(avatar2.pos.y < 10){
+                       avatar2.pos.y = avatar2.pos.y+10;
+                   }
+
+               }
+               if(!flag){
                    avatar2.moveBackward();
                }
+
            }
            if(rightPressed){
                avatar2.changeAngle(3);
            }
        }
-
-    }
-    public void movementBot(){
-            Enemy bot=enemies.get(0);
-
-            bot.moveForward();
-        System.out.println(bot.pos.x);
-            if (bot.pos.y >= 300) {
-                bot.pos.y = 299;
-                bot.changeAngle(90);
-            }
-            if (bot.pos.x <= 150) {
-                bot.pos.x = 151;
-                bot.changeAngle(90);
-            }
-            if (bot.pos.y <= 71) {
-                bot.pos.y = 72;
-                bot.changeAngle(90);
-            }
-            if (bot.pos.x >= 423) {
-                bot.pos.x = 422;
-                bot.changeAngle(90);
-            }
-
 
     }
 
@@ -584,55 +705,11 @@ public class GameController implements Initializable {
             }
         }
         if(keyEvent.getCode()==KeyCode.SHIFT){
-            if(avatar2!=null) {
-                if (avatar2.bullets != 0) {
-                    if (path1.exists()) {
-                        try {
-                            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path1);
-                            Clip clip = AudioSystem.getClip();
-                            clip.open(audioInputStream);
-                            clip.start();
-                        } catch (UnsupportedAudioFileException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (LineUnavailableException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        System.out.println("No existe");
-                    }
-                    Bullet bullet = new Bullet(canvas,
-                            new Vector(avatar2.pos.x, avatar2.pos.y),
-                            new Vector(2 * avatar2.direction.x, 2 * avatar2.direction.y), 2);
-                    bullets.add(bullet);
-                    avatar2.bullets--;
-                } else {
-                    if (path2.exists()) {
-                        try {
-                            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path2);
-                            Clip clip = AudioSystem.getClip();
-                            clip.open(audioInputStream);
-                            clip.start();
-                        } catch (UnsupportedAudioFileException e) {
-                            throw new RuntimeException(e);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (LineUnavailableException e) {
-                            throw new RuntimeException(e);
-                        }
-                    } else {
-                        System.out.println("No existe");
-                    }
-                }
-            }
-        }
-        if(keyEvent.getCode() == KeyCode.ENTER) {
-            if (avatar2 != null) {
-                if (path3.exists()) {
+            if(avatar2.bullets!=0){
+                if(path1.exists()){
                     try {
-                        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path3);
-                        Clip clip = AudioSystem.getClip();
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                        Clip clip= AudioSystem.getClip();
                         clip.open(audioInputStream);
                         clip.start();
                     } catch (UnsupportedAudioFileException e) {
@@ -642,12 +719,96 @@ public class GameController implements Initializable {
                     } catch (LineUnavailableException e) {
                         throw new RuntimeException(e);
                     }
-                } else {
+                    }else{
+                        System.out.println("No existe");
+                    }
+                Bullet bullet = new Bullet(canvas,
+                        new Vector(avatar2.pos.x , avatar2.pos.y),
+                        new Vector(2*avatar2.direction.x,2*avatar2.direction.y),2);
+                bullets.add(bullet);
+                avatar2.bullets--;
+            }else {
+                if(path2.exists()){
+                    try {
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path2);
+                        Clip clip= AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
                     System.out.println("No existe");
                 }
-                avatar2.bullets = 6;
+            }
+        }
+        if(keyEvent.getCode() == KeyCode.ENTER){
+            if (path3.exists()) {
+                try {
+                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path3);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioInputStream);
+                    clip.start();
+                } catch (UnsupportedAudioFileException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (LineUnavailableException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println("No existe");
+            }
+            avatar2.bullets=6;
+        }
+
+    }
+    /*public void attack() {
+        //Random random = new Random();
+
+        new Thread(
+                () -> {
+                    boolean bitchPlease=true;
+        while (bitchPlease) {
+
+            if (Wpressed) {
+                if (enemy != null) {
+                    if (enemy.bullets != 0) {
+                        if(path1.exists()){
+                            try {
+                                AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                                Clip clip= AudioSystem.getClip();
+                                clip.open(audioInputStream);
+                                clip.start();
+                            } catch (UnsupportedAudioFileException e) {
+                                throw new RuntimeException(e);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (LineUnavailableException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else{
+                            System.out.println("No existe");
+                        }
+                        Bullet bullet = new Bullet(canvas,
+                                new Vector(enemy.pos.x, enemy.pos.y),
+                                new Vector(2 * enemy.direction.x, 2 * enemy.direction.y), 3);
+                        bullets.add(bullet);
+                        enemy.bullets--;
+                    } else {
+                        System.out.println("no bullets left");
+                        bitchPlease=false;
+                    }
+                } else {
+                    System.out.println("enemy null");
+                }
+            } else {
             }
         }
     }
-
+    }*/
 }
