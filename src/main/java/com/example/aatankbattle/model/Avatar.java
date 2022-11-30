@@ -7,7 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
+
 
 public class Avatar {
     private Canvas canvas;
@@ -36,6 +36,22 @@ public class Avatar {
         heart = new Image(uri2);
         String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
         bullet=new Image(uri3);
+    }
+    public Avatar(int type){
+
+        if(type == 1){
+            pos = new Vector(250, 250);
+            direction = new Vector(1,0);
+        } else if (type == 2){
+            pos = new Vector(750, 250);
+            direction = new Vector(-1,0);
+        } else {
+            pos = new Vector(500, 500);
+            direction = new Vector(0,1);
+        }
+
+        bullets = 5;
+        life = 5;
     }
     public Avatar(Canvas canvas,int o){
         name=Singleton.getInstance().player1.getName();

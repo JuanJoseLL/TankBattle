@@ -3,14 +3,14 @@ package com.example.aatankbattle.model;
 public class Singleton {
         private static Singleton instance;
 
-        public Player player1;
-        public Player player2;
-        public Player player3;
+        public Avatar player1;
+        public Avatar player2;
+        public Enemy player3;
 
         private Singleton(){
-            this.player1=new Player();
-            this.player2=new Player();
-            this.player3=new Player();
+            this.player1=new Avatar(1);
+            this.player2=new Avatar(2);
+            this.player3=new Enemy();
         }
 
         public static Singleton getInstance(){
@@ -26,17 +26,17 @@ public class Singleton {
             this.player3.setName(name3);
         }
 
-        public Player getPlayer1(){
+        public Avatar getPlayer1(){
             return player1;
         }
 
-        public void setPlayer1(Player player1){
+        public void setPlayer1(Avatar player1){
             this.player1= player1;
         }
 
-        public Player getPlayer2(){return player2;}
+        public Avatar getPlayer2(){return player2;}
 
-        public void setPlayer2(Player player2){
+        public void setPlayer2(Avatar player2){
             this.player2= player2;
         }
 

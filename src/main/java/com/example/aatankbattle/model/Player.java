@@ -6,7 +6,8 @@ public class Player {
     private String name;
     private int victories;
 
-    public Player() {
+    public Player(int type) {
+
     }
     public Player(String name, int victories){
         this.name=name;

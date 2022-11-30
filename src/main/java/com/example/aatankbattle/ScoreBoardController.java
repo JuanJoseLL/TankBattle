@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
@@ -114,17 +113,16 @@ public class ScoreBoardController {
             current.hide();
     }
 
-   public  void arr(String name, int victories){
+    void arr(String name, int victories){
             player=new Player(name,victories);
             players.add(player);
-            players.sort(Comparator.comparing(Player::getVictories));
+            players.sort(Collections.reverseOrder());
             for (int i = 0; i < players.size(); i++) {
-                    System.out.println(players.get(i).getName()+" "+players.get(i).getVictories());
-
+                    System.out.println(players.get(i).getName()+players.get(i).getVictories());
             }
+    }
+    int search(String name){
 
-        }
-        public int search(String name){
                 for (int i = 0; i < players.size(); i++) {
                         if(players.get(i).getName().equals(name)){
                                 return players.get(i).getVictories();
