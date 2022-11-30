@@ -193,6 +193,18 @@ public class GameController implements Initializable {
                                 Stage current = (Stage) canvas.getScene().getWindow();
                                 current.hide();
                             }
+                            if( enemies.size() != 0 && avatar2 == null && avatar==null){
+
+                                gc.setFont(Font.font(35));
+                                gc.setFill(Color.YELLOW);
+                                avatar.setWins(avatar.getWins()+1);
+                                scoreboard.insert(enemy);
+                                gc.fillText(avatar.getName()+" \n  won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
+                                isRunning=false;
+                                GameMain.showWindow("winCanva.fxml");
+                                Stage current = (Stage) canvas.getScene().getWindow();
+                                current.hide();
+                            }
                             if(avatar!=null){
                                 avatar.draw();
 
@@ -235,6 +247,7 @@ public class GameController implements Initializable {
 
                             detectColissionAvatar();
                             doKeyboardActions();
+                            keyboardActionEnemy();
                         });
                         //Sleep
                         try {
@@ -292,6 +305,39 @@ public class GameController implements Initializable {
                     }
                 }
         ).start();
+    }
+    public void keyboardActionEnemy(){
+        if(enemy !=null){
+            if(enemy.pos.x > canvas.getWidth()-15 ){
+                enemy.pos.x = enemy.pos.x-10;
+            }else if(enemy.pos.y>canvas.getHeight()-15 ){
+                enemy.pos.y = enemy.pos.y-10;
+            }else if(enemy.pos.x < 10 ){
+                enemy.pos.x = enemy.pos.x+10;
+            }else if(enemy.pos.y < 10){
+                enemy.pos.y = enemy.pos.y+10;
+            }else{
+                enemy.moveForward();
+            }
+            boolean flag2 = false;
+            for (int f = 0; f < walls.size(); f++) {
+                if (walls.get(f).getHitbox().intersects(enemy.pos.x - enemy.direction.x - 15, enemy.pos.y - enemy.direction.y - 15, 10, 10)) {
+                    flag2 = true;
+                } else if (enemy.pos.x > canvas.getWidth() - 15) {
+                    enemy.pos.x = enemy.pos.x - 10;
+                } else if (enemy.pos.y > canvas.getHeight() - 15) {
+                    enemy.pos.y = enemy.pos.y - 10;
+                } else if (enemy.pos.x < 10) {
+                    enemy.pos.x = enemy.pos.x + 10;
+                } else if (enemy.pos.y < 10) {
+                    enemy.pos.y = enemy.pos.y + 10;
+                }
+            }
+            if(!flag2){
+                enemy.moveBackward();
+            }
+        }
+
     }
 
     public void sequence(double x,double y){
