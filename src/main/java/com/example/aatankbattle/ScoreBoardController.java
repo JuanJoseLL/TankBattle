@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
@@ -19,8 +20,10 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ScoreBoardController {
-        ArrayList<Player>players=new ArrayList<>();
-        Player player;
+        ArrayList<Avatar>avatars=new ArrayList<>();
+        Avatar avatar;
+        Avatar avatar2;
+
         @FXML
         private Button returnBTN;
         @FXML
@@ -113,19 +116,19 @@ public class ScoreBoardController {
             current.hide();
     }
 
-    void arr(String name, int victories){
-            player=new Player(name,victories);
-            players.add(player);
-            players.sort(Collections.reverseOrder());
-            for (int i = 0; i < players.size(); i++) {
-                    System.out.println(players.get(i).getName()+players.get(i).getVictories());
+   public void arr(String name, int victories){
+            avatar=new Avatar(name,victories);
+            avatars.add(avatar);
+            avatars.sort(Comparator.comparing(Avatar::getWins));
+            for (int i = 0; i < avatars.size(); i++) {
+                    System.out.println(avatars.get(i).getName()+avatars.get(i).getWins());
             }
     }
     int search(String name){
 
-                for (int i = 0; i < players.size(); i++) {
-                        if(players.get(i).getName().equals(name)){
-                                return players.get(i).getVictories();
+                for (int i = 0; i < avatars.size(); i++) {
+                        if(avatars.get(i).getName().equals(name)){
+                                return avatars.get(i).getWins();
                         }
                 }
                 return 0;

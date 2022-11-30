@@ -65,7 +65,6 @@ public class FirstScreenController implements Initializable {
     }
     @FXML
     void pressS(ActionEvent event) {
-
         GameMain.showWindow("scoreBoard.fxml");
         Stage current = (Stage) playerNickname1.getScene().getWindow();
         current.hide();

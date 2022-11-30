@@ -20,7 +20,7 @@ public class Avatar {
     public int bullets;
     public int life;
     private String name;
-    Player player;
+    private int wins;
 
     public Avatar(Canvas canvas){
 
@@ -67,6 +67,10 @@ public class Avatar {
         heart = new Image(uri2);
         String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
         bullet=new Image(uri3);
+    }
+    public Avatar(String name,int wins){
+        this.name=name;
+        this.wins=wins;
     }
 
 
@@ -140,5 +144,13 @@ public class Avatar {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getWins() {
+        return wins;
+    }
+
+    public void setWins(int wins) {
+        this.wins = wins;
     }
 }

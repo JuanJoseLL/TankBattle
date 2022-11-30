@@ -58,7 +58,7 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fs=new FirstScreenController();
+       scoreBoardController=new ScoreBoardController();
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
 
@@ -180,7 +180,7 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
-                                int vic=scoreBoardController.search(avatar.getName())+1;
+                                int vic= scoreBoardController.search(avatar2.getName())+1;
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
