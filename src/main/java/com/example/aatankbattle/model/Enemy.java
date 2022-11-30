@@ -17,6 +17,8 @@ public class Enemy {
     private Image bullet;
     private String name;
     public int bullets;
+    public Vector pos;
+    public Vector direction;
     public int life;
     public Enemy(Canvas canvas, int x, int y){
         name=" ";
@@ -24,8 +26,8 @@ public class Enemy {
         gc = canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank22.png").getPath();
         tank=new Image(uri);
-        this.x = x;
-        this.y = y;
+        pos=new Vector(x,y);
+        direction=new Vector(2,0);
         String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
         heart = new Image(uri2);
         String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
@@ -73,10 +75,23 @@ public class Enemy {
         if (bullets >= 5) {
             gc.drawImage(bullet, 15, 20, 10, 10);
         }
-        gc.drawImage(tank,x-12.5,y-12.5,50,50);
+        //gc.rotate(90+ direction.getAngle());
+        gc.drawImage(tank, pos.x-12.5, pos.y-12.5,50,50);
         gc.restore();
     }
+    public void changeAngle(double a ){
 
+        double amp = direction.getApmlitude();
+        double angle = direction.getAngle();
+        angle += a;
+        direction.x = amp*Math.cos(Math.toRadians(angle));
+        direction.y = amp*Math.sin(Math.toRadians(angle));
+
+    }
+    public void moveForward(){
+        pos.x += direction.x;
+        pos.y += direction.y;
+    }
     public String getName() {
         return name;
     }

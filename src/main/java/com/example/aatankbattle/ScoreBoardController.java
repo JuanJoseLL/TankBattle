@@ -18,7 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import com.google.gson.Gson;
+
 
 public class ScoreBoardController  implements Initializable{
         Avatar avatar;
@@ -95,8 +95,8 @@ public class ScoreBoardController  implements Initializable{
         public void initialize(URL url, ResourceBundle resourceBundle) {
                 gc = canvas.getGraphicsContext2D();
                 canvas.setFocusTraversable(true);
-                updateSb();
                 drawBackground();
+                updateSb();
 
         }
         public void drawBackground(){
@@ -116,10 +116,8 @@ public class ScoreBoardController  implements Initializable{
         }
 
 
-
-
         public void updateSb(){
-                ArrayList<Avatar> avatars = Scoreboard.getInstance().updateLeaderboard();
+                ArrayList<Avatar> avatars = Scoreboard.getInstance().getAvatars();
 
                 if(avatars.size()>=1 && avatars.get(0)!=null){
                         name1.setText(avatars.get(0).getName());
@@ -161,26 +159,12 @@ public class ScoreBoardController  implements Initializable{
                         name10.setText(avatars.get(9).getName());
                         score10.setText(String.valueOf(avatars.get(9).getWins()));
                 }
+                saveData();
 
         }
-        public void loadData(){
-                String temp="";
-                try {
-                        File file = new File("playerScore.txt");
-                        FileInputStream fis = new FileInputStream(file);
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                                temp += line;
-                        }
-                        fis.close();
-                } catch (IOException e) {
-                        e.printStackTrace();
-                }
 
-        }
         public void saveData(){
-                ArrayList<Avatar> avatars = Scoreboard.getInstance().updateLeaderboard();
+                ArrayList<Avatar> avatars = Scoreboard.getInstance().getAvatars();
                 try {
                         FileOutputStream fos = new FileOutputStream(new File("playerScore.txt"));
                         for (int i = 0; i < avatars.size(); i++) {
@@ -188,6 +172,7 @@ public class ScoreBoardController  implements Initializable{
                                 fos.write(avatars.get(i).getName().getBytes(StandardCharsets.UTF_8));
                                 fos.write(",".getBytes(StandardCharsets.UTF_8));
                                 fos.write( win.getBytes(StandardCharsets.UTF_8));
+                                fos.write("\n".getBytes(StandardCharsets.UTF_8));
                         }
                         fos.close();
                 } catch (FileNotFoundException e) {
@@ -196,7 +181,5 @@ public class ScoreBoardController  implements Initializable{
                         e.printStackTrace();
                 }
         }
-
-
 
 }
