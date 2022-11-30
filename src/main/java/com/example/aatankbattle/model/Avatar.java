@@ -57,13 +57,13 @@ public class Avatar {
     }
     public Avatar(Canvas canvas,int o){
         name= Player.getInstance().player1.getName();
-        bullets=6;
+        bullets=5;
         life=5;
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank23.png").getPath();
         tank = new Image(uri);
-        pos = new Vector(100,200);
+        pos = new Vector(500,500);
         direction = new Vector(2,0);
         String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
         heart = new Image(uri2);
@@ -73,7 +73,7 @@ public class Avatar {
     //enemy
     public Avatar(Canvas canvas, int o, int a){
         name= Player.getInstance().player3.getName();
-        bullets=6;
+        bullets=5;
         life=5;
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();

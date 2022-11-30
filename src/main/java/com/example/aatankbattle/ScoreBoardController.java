@@ -1,14 +1,11 @@
 package com.example.aatankbattle;
 
 import com.example.aatankbattle.model.Avatar;
-import com.example.aatankbattle.model.Player;
 import com.example.aatankbattle.model.Scoreboard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
-import java.io.*;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import javafx.fxml.Initializable;
@@ -21,7 +18,7 @@ import javafx.stage.Stage;
 
 
 public class ScoreBoardController  implements Initializable{
-        Avatar avatar;
+
         @FXML
         private Button returnBTN;
         @FXML
@@ -90,15 +87,33 @@ public class ScoreBoardController  implements Initializable{
         @FXML
         private Label score10;
 
-
+        private ArrayList<Avatar> avatars;
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
                 gc = canvas.getGraphicsContext2D();
                 canvas.setFocusTraversable(true);
+
+                Scoreboard.getInstance().loadData();
+                avatars=Scoreboard.getInstance().getAvatars();
+                for (int i=0;i<avatars.size();i++){
+                        Avatar a=avatars.get(i);
+                        for(int j=1;j<avatars.size();j++){
+                                if(a.getName().equals(avatars.get(j).getName())){
+                                        a.setWins(avatars.get(j).getWins());
+                                        avatars.remove(j);
+
+
+                                }
+                        }
+                }
+
+                System.out.println(avatars.size());
+                showScore();
                 drawBackground();
-                updateSb();
+
 
         }
+
         public void drawBackground(){
                 String uri2 = "file:"+ GameMain.class.getResource("bcgd.jpg").getPath();
                 bg = new Image(uri2);
@@ -116,9 +131,10 @@ public class ScoreBoardController  implements Initializable{
         }
 
 
-        public void updateSb(){
-                Scoreboard.getInstance().loadData();
-                ArrayList<Avatar> avatars = Scoreboard.getInstance().getAvatars();
+        public void showScore(){
+                System.out.println("dddd"+avatars.get(0).getWins());
+                System.out.println(avatars.size());
+
                 if(avatars.size()>=1 && avatars.get(0)!=null){
                         name1.setText(avatars.get(0).getName());
                         score1.setText(String.valueOf(avatars.get(0).getWins()));

@@ -41,30 +41,34 @@ public class Scoreboard {
 
     }
     public void insert(Avatar p){
-
         if(search(p)==null){
             avatars.add(p);
-        }else wonAGame(search(p));;
+        }else wins(search(p));
         avatars.sort(new Comparator<Avatar>() {
             @Override
             public int compare(Avatar o1, Avatar o2) {
                 return o1.getWins() - o2.getWins();
             }
         });
-        System.out.println(avatars);
+
         Collections.reverse(avatars);
+        System.out.println(avatars.size()+"  faaff");
+        System.out.println(avatars.get(0).getName());
+        System.out.println(avatars.get(0).getWins());
         saveData();
     }
-    public Avatar search(Avatar p){
-        for(Avatar x : avatars){
-            if(p.getName().equals(x.getName()))
-                return x;
+
+    public Avatar search(Avatar b){
+        for(Avatar a : avatars){
+            if(b.getName().equals(a.getName()))
+                return a;
         }
         return null;
     }
 
-    public void wonAGame(Avatar p){
+    public void wins(Avatar p){
         p.setWins(p.getWins()+1);
+
     }
 
     public ArrayList<Avatar> getAvatars() {
