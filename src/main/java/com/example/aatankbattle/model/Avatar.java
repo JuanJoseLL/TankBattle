@@ -70,11 +70,68 @@ public class Avatar {
         String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
         bullet=new Image(uri3);
     }
+    //enemy
+    public Avatar(Canvas canvas, int o, int a){
+        name= Player.getInstance().player3.getName();
+        bullets=6;
+        life=5;
+        this.canvas=canvas;
+        gc=canvas.getGraphicsContext2D();
+        String uri = "file:"+ GameMain.class.getResource("tank22.png").getPath();
+        tank = new Image(uri);
+        pos = new Vector(400,400);
+        direction = new Vector(2,0);
+        String uri2 = "file:"+ GameMain.class.getResource("heartPlus.png").getPath();
+        heart = new Image(uri2);
+        String uri3="file:"+GameMain.class.getResource("bullet.png").getPath();
+        bullet=new Image(uri3);
+    }
     public Avatar(String name,int wins){
         this.name=name;
         this.wins=wins;
     }
-
+    public void drawEnemy(){
+        gc.save();
+        gc.translate(pos.x,pos.y);
+        gc.setFont(Font.font(10));
+        gc.setFill(Color.WHITE);
+        gc.fillText(name,-20, -35);
+        //Hearts
+        if(life>=1){
+            gc.drawImage(heart,-25,-30,10,10);
+        }
+        if(life>=2){
+            gc.drawImage(heart,-15,-30,10,10);
+        }
+        if(life>=3){
+            gc.drawImage(heart,-5,-30,10,10);
+        }
+        if(life>=4){
+            gc.drawImage(heart,5,-30,10,10);
+        }
+        if (life >= 5) {
+            gc.drawImage(heart, 15, -30, 10, 10);
+        }
+        //bullets
+        if(bullets>=1){
+            gc.drawImage(bullet,-25,20,10,10);
+        }
+        if(bullets>=2){
+            gc.drawImage(bullet,-15,20,10,10);
+        }
+        if(bullets>=3){
+            gc.drawImage(bullet,-5,20,10,10);
+        }
+        if(bullets>=4){
+            gc.drawImage(bullet,5,20,10,10);
+        }
+        if (bullets >= 5) {
+            gc.drawImage(bullet, 15, 20, 10, 10);
+        }
+        gc.rotate(90+direction.getAngle());
+        gc.drawImage(tank,-25,-25,50,50);
+        gc.restore();
+    }
 
     public void draw(){
         gc.save();
@@ -119,6 +176,7 @@ public class Avatar {
         gc.restore();
 
     }
+
 
 
     public void changeAngle(double a ){

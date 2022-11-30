@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Random;
 
 public class GameController implements Initializable {
 
@@ -33,11 +34,12 @@ public class GameController implements Initializable {
     private Image[] explode=new Image[3];
     private Image bg;
     private Image wall;
-    private ArrayList<Enemy> enemies;
+    private ArrayList<Avatar> enemies;
     private ArrayList<Bullet> bullets;
     private ArrayList<Wall> walls;
     private Avatar avatar;
     private Avatar avatar2;
+    private Avatar enemy;
     private boolean exploding=true;
     private int cont=0;
     //Estados de las teclas
@@ -70,8 +72,7 @@ public class GameController implements Initializable {
 
         //Se generan enemigos en el canvas
         enemies = new ArrayList<>();
-        enemies.add(new Enemy(canvas,300,100));
-        enemies.add(new Enemy(canvas,300,300));
+        enemies.add(new Avatar(canvas,0,0));
         walls = new ArrayList<>();
 
 
@@ -85,9 +86,11 @@ public class GameController implements Initializable {
 
         avatar = new Avatar(canvas);
         avatar2 = new Avatar(canvas,0);
+        enemy=new Avatar(canvas,0,0);
 
         avatar.setName(Player.getInstance().player1.getName());
         avatar2.setName(Player.getInstance().player2.getName());
+        enemy.setName(Player.getInstance().player3.getName());
 
         String uri0 = "file:"+GameMain.class.getResource("explode0.png").getPath();
         String uri1 = "file:"+GameMain.class.getResource("explode1.png").getPath();
@@ -101,6 +104,9 @@ public class GameController implements Initializable {
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
         draw();
+        drawBot();
+        //attack();
+
     }
 
     public void generateWalls(){
@@ -161,13 +167,10 @@ public class GameController implements Initializable {
                 () -> {
                     while (isRunning) {
                         Platform.runLater(() -> {
-
                             gc.setFill(Color.BLACK);
                             gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
                             drawBackground();
-
                             if(enemies.size() == 0 && avatar==null ){
-
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
                                 avatar2.setWins(avatar2.getWins()+1);
@@ -213,7 +216,7 @@ public class GameController implements Initializable {
                                 walls.get(i).draw();
                             }
                             for (int i = 0; i < enemies.size(); i++) {
-                                enemies.get(i).draw();
+                                enemies.get(i).drawEnemy();
                             }
                             for (int i = 0; i < bullets.size(); i++) {
                                 bullets.get(i).draw();
@@ -229,6 +232,7 @@ public class GameController implements Initializable {
                             }
                             //Colisiones
                             detectColission();
+
                             detectColissionAvatar();
                             doKeyboardActions();
                         });
@@ -242,7 +246,53 @@ public class GameController implements Initializable {
                 }
         ).start();
     }
+    public void drawBot() {
 
+        for (int i = 0; i < enemies.size(); i++) {
+            enemies.get(i).changeAngle(45);
+        }
+
+        final boolean[] flag = {true};
+        new Thread(
+                () -> {
+                    while (isRunning) {
+                        Platform.runLater(() -> {
+                            for (int i = 0; i < enemies.size(); i++) {
+
+                                Avatar bot = enemies.get(i);
+
+                                bot.moveForward();
+
+
+                                if (bot.pos.y >= 500) {
+                                    bot.pos.y = 300;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.x <= 177) {
+                                    bot.pos.x = 178;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.y <= 71) {
+                                    bot.pos.y = 72;
+                                    bot.changeAngle(90);
+                                }
+                                if (bot.pos.x >= 423) {
+                                    bot.pos.x = 422;
+                                    bot.changeAngle(90);
+                                }
+
+                            }
+
+                        });
+                        try {
+                            Thread.sleep(50);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+        ).start();
+    }
 
     public void sequence(double x,double y){
         exploding=true;
@@ -279,6 +329,7 @@ public class GameController implements Initializable {
             Bullet b=bullets.get(i);
             double distanceAv2 = 0;
             double distanceAv1 = 0;
+            double distanceAv3 = 0;
             if(avatar!=null){
                 double cateto3 = b.pos.x - avatar.pos.x;
                 double cateto4 = b.pos.y - avatar.pos.y;
@@ -289,6 +340,11 @@ public class GameController implements Initializable {
                 double cateto5 = b.pos.x - avatar2.pos.x;
                 double cateto6 = b.pos.y - avatar2.pos.y;
                 distanceAv2 = Math.sqrt(Math.pow(cateto5, 2) + Math.pow(cateto6, 2));
+            }
+            if (enemy != null) {
+                double cateto7 = b.pos.x - enemy.pos.x;
+                double cateto8 = b.pos.y - enemy.pos.y;
+                distanceAv3 = Math.sqrt(Math.pow(cateto7, 2) + Math.pow(cateto8, 2));
             }
 
             if (distanceAv1 < 25 && b.getPlayer() != 1) {
@@ -319,26 +375,40 @@ public class GameController implements Initializable {
                 }
 
             }
+            if (distanceAv3 < 25 && b.getPlayer() != 3) {
+                if(enemy!=null){
+                    sequence(enemy.pos.x-15, enemy.pos.y-15);
+                    System.out.println("hit al enemy 2");
+                    bullets.remove(i);
+                    enemy.life--;
+                    System.out.println(enemy.life);
+                    if (enemy.life == 0) {
+                        enemy = null;
+                    }
+                    return;
+                }
+
+            }
         }
 
     }
     private void detectColission() {
 
-        for(int i=0;i<enemies.size();i++){
+        /*for(int i=0;i<enemies.size();i++){
             for(int j=0;j<bullets.size();j++) {
                 Bullet b = bullets.get(j);
-                Enemy e = enemies.get(i);
-                double cateto1 = b.pos.x - e.x;
-                double cateto2 = b.pos.y - e.y;
+                Avatar e = enemies.get(i);
+                double cateto1 = b.pos.x - e.pos.x;
+                double cateto2 = b.pos.y - e.pos.y;
                 double distance = Math.sqrt(Math.pow(cateto1, 2) + Math.pow(cateto2, 2));
                 if (distance < 25) {
                     bullets.remove(j);
-                    sequence(enemies.get(i).x, enemies.get(i).y);
+                    sequence(enemies.get(i).pos.x, enemies.get(i).pos.y);
                     enemies.remove(i);
                     return;
                 }
             }
-        }
+        }*/
         for (int i=0;i<walls.size();i++){
             for (int j=0;j<bullets.size();j++){
                 Bullet b=bullets.get(j);
@@ -573,9 +643,9 @@ public class GameController implements Initializable {
                     } catch (LineUnavailableException e) {
                         throw new RuntimeException(e);
                     }
-                }else{
-                    System.out.println("No existe");
-                }
+                    }else{
+                        System.out.println("No existe");
+                    }
                 Bullet bullet = new Bullet(canvas,
                         new Vector(avatar2.pos.x , avatar2.pos.y),
                         new Vector(2*avatar2.direction.x,2*avatar2.direction.y),2);
@@ -621,4 +691,48 @@ public class GameController implements Initializable {
         }
 
     }
+    /*public void attack() {
+        //Random random = new Random();
+
+        new Thread(
+                () -> {
+                    boolean bitchPlease=true;
+        while (bitchPlease) {
+
+            if (Wpressed) {
+                if (enemy != null) {
+                    if (enemy.bullets != 0) {
+                        if(path1.exists()){
+                            try {
+                                AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                                Clip clip= AudioSystem.getClip();
+                                clip.open(audioInputStream);
+                                clip.start();
+                            } catch (UnsupportedAudioFileException e) {
+                                throw new RuntimeException(e);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (LineUnavailableException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }else{
+                            System.out.println("No existe");
+                        }
+                        Bullet bullet = new Bullet(canvas,
+                                new Vector(enemy.pos.x, enemy.pos.y),
+                                new Vector(2 * enemy.direction.x, 2 * enemy.direction.y), 3);
+                        bullets.add(bullet);
+                        enemy.bullets--;
+                    } else {
+                        System.out.println("no bullets left");
+                        bitchPlease=false;
+                    }
+                } else {
+                    System.out.println("enemy null");
+                }
+            } else {
+            }
+        }
+    }
+    }*/
 }

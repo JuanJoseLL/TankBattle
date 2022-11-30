@@ -181,7 +181,6 @@ public class ScoreBoardController  implements Initializable{
         }
         public void saveData(){
                 ArrayList<Avatar> avatars = Scoreboard.getInstance().updateLeaderboard();
-
                 try {
                         FileOutputStream fos = new FileOutputStream(new File("playerScore.txt"));
                         for (int i = 0; i < avatars.size(); i++) {
