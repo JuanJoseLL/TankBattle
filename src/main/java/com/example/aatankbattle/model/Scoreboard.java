@@ -60,4 +60,5 @@ public class Scoreboard {
         avatars.clear();
         return printScore(root, 1);
     }
+
 }

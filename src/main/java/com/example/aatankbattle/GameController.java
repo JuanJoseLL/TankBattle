@@ -50,6 +50,7 @@ public class GameController implements Initializable {
     boolean downPressed = false;
     boolean rightPressed = false;
     boolean leftPressed = false;
+    private Scoreboard scoreboard;
     private ScoreBoardController scoreBoardController;
     public int hitsP1=0;
     public int hitsP2=0;
@@ -61,6 +62,7 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        scoreboard=new Scoreboard();
         scoreBoardController=new ScoreBoardController();
         fs=new FirstScreenController();
         gc = canvas.getGraphicsContext2D();
@@ -168,8 +170,8 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
-                                int vic=scoreBoardController.search(avatar.getName())+1;
-                                scoreBoardController.arr(avatar.getName(),vic);
+                                avatar2.setWins(avatar2.getWins()+1);
+                                scoreboard.insert(avatar2);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
                                 GameMain.showWindow("scoreBoard.fxml");
@@ -180,8 +182,8 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
-                                int vic=scoreBoardController.search(avatar.getName())+1;
-                                scoreBoardController.arr(avatar.getName(),vic);
+                                avatar.setWins(avatar.getWins()+1);
+                                scoreboard.insert(avatar);
                                 gc.fillText(avatar.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
                                 isRunning=false;
                                 GameMain.showWindow("winCanva.fxml");
@@ -599,6 +601,22 @@ public class GameController implements Initializable {
             }
         }
         if(keyEvent.getCode() == KeyCode.ENTER){
+            if (path3.exists()) {
+                try {
+                    AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path3);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioInputStream);
+                    clip.start();
+                } catch (UnsupportedAudioFileException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (LineUnavailableException e) {
+                    throw new RuntimeException(e);
+                }
+            } else {
+                System.out.println("No existe");
+            }
             avatar2.bullets=6;
         }
 

@@ -1,14 +1,15 @@
 package com.example.aatankbattle;
 
 import com.example.aatankbattle.model.Avatar;
+import com.example.aatankbattle.model.Player;
 import com.example.aatankbattle.model.Scoreboard;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -17,9 +18,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import com.google.gson.Gson;
 
 public class ScoreBoardController  implements Initializable{
-        ArrayList<Avatar>avatars=new ArrayList<>();
         Avatar avatar;
         @FXML
         private Button returnBTN;
@@ -89,6 +90,7 @@ public class ScoreBoardController  implements Initializable{
         @FXML
         private Label score10;
 
+
         @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
                 gc = canvas.getGraphicsContext2D();
@@ -113,23 +115,9 @@ public class ScoreBoardController  implements Initializable{
                 current.hide();
         }
 
-        public void arr(String name, int victories){
-                avatar=new Avatar(name,victories);
-                avatars.add(avatar);
-                avatars.sort(Comparator.comparing(Avatar::getWins));
-                for(int i=0;i<avatars.size();i++){
-                        Scoreboard.getInstance().insert(avatars.get(i));
-                }
-        }
 
-        public int search(String name){
-                for (int i = 0; i < avatars.size(); i++) {
-                        if(avatars.get(i).getName().equals(name)){
-                                return avatars.get(i).getWins();
-                        }
-                }
-                return 0;
-        }
+
+
         public void updateSb(){
                 ArrayList<Avatar> avatars = Scoreboard.getInstance().updateLeaderboard();
 
@@ -175,7 +163,40 @@ public class ScoreBoardController  implements Initializable{
                 }
 
         }
+        public void loadData(){
+                String temp="";
+                try {
+                        File file = new File("playerScore.txt");
+                        FileInputStream fis = new FileInputStream(file);
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                                temp += line;
+                        }
+                        fis.close();
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
 
+        }
+        public void saveData(){
+                ArrayList<Avatar> avatars = Scoreboard.getInstance().updateLeaderboard();
+
+                try {
+                        FileOutputStream fos = new FileOutputStream(new File("playerScore.txt"));
+                        for (int i = 0; i < avatars.size(); i++) {
+                                String win= String.valueOf(avatars.get(i).getWins());
+                                fos.write(avatars.get(i).getName().getBytes(StandardCharsets.UTF_8));
+                                fos.write(",".getBytes(StandardCharsets.UTF_8));
+                                fos.write( win.getBytes(StandardCharsets.UTF_8));
+                        }
+                        fos.close();
+                } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        }
 
 
 
