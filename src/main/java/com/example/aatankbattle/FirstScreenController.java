@@ -1,5 +1,7 @@
 package com.example.aatankbattle;
 
+import com.example.aatankbattle.model.Player;
+import com.example.aatankbattle.model.Singleton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,13 +36,19 @@ public class FirstScreenController implements Initializable {
     private Image wall;
     @FXML
     private Canvas canvas;
+    Player player1;
+    Player player2;
+    GameController gameController;
+
 
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
+
         drawBackground();
     }
 
@@ -55,8 +63,10 @@ public class FirstScreenController implements Initializable {
     }
     @FXML
     void press(ActionEvent event) {
+        gameController=new GameController();
         GameMain.showWindow("canvasView.fxml");
         Stage current = (Stage) playerNickname1.getScene().getWindow();
+        Singleton.getInstance().createPlayers(playerNickname1.getText(),playerNickname2.getText(),CPU.getText());
         current.hide();
     }
     @FXML
@@ -66,4 +76,5 @@ public class FirstScreenController implements Initializable {
         Stage current = (Stage) playerNickname1.getScene().getWindow();
         current.hide();
     }
+
 }

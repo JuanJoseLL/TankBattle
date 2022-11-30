@@ -20,11 +20,12 @@ public class Avatar {
     public int bullets;
     public int life;
     private String name;
+    Player player;
 
     public Avatar(Canvas canvas){
+
         bullets=5;
         life=5;
-        name="JuanJo";
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank.png").getPath();
@@ -37,9 +38,9 @@ public class Avatar {
         bullet=new Image(uri3);
     }
     public Avatar(Canvas canvas,int o){
+        name=Singleton.getInstance().player1.getName();
         bullets=6;
         life=5;
-        name="Sara";
         this.canvas=canvas;
         gc=canvas.getGraphicsContext2D();
         String uri = "file:"+ GameMain.class.getResource("tank23.png").getPath();
@@ -121,4 +122,7 @@ public class Avatar {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 }

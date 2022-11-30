@@ -1,12 +1,16 @@
 package com.example.aatankbattle.model;
 
+import javafx.scene.Node;
+
 public class Player {
     private String name;
     private int victories;
 
-    public Player(String name, int victories) {
-        this.name = name;
-        this.victories = victories;
+    public Player() {
+    }
+    public Player(String name, int victories){
+        this.name=name;
+        this.victories=victories;
     }
 
     public String getName() {
