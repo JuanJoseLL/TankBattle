@@ -23,7 +23,7 @@ public class Avatar {
     private int wins;
 
     public Avatar(Canvas canvas){
-
+        name=" ";
         bullets=5;
         life=5;
         this.canvas=canvas;

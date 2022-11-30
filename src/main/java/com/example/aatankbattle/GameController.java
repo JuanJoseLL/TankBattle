@@ -54,11 +54,14 @@ public class GameController implements Initializable {
     public int hitsP2=0;
 
     File path1= new File("C://Users//Sara Cardona//Downloads//tank_shot-_online-audio-converter.com_.wav/");
+    File path2= new File("C:/Users/Sara Cardona/Downloads/mixkit-empty-tube-hit-3197.wav");
+    File path3= new File("C:/Users/Sara Cardona/Downloads/lock-load-reload-3.wav");
     FirstScreenController fs;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       scoreBoardController=new ScoreBoardController();
+        scoreBoardController=new ScoreBoardController();
+        fs=new FirstScreenController();
         gc = canvas.getGraphicsContext2D();
         canvas.setFocusTraversable(true);
 
@@ -94,22 +97,6 @@ public class GameController implements Initializable {
         bg = new Image(uri4);
         String uri5 = "file:"+GameMain.class.getResource("muro.png").getPath();
         wall=new Image(uri5);
-        if(path1.exists()){
-            try {
-                AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
-                Clip clip= AudioSystem.getClip();
-                clip.open(audioInputStream);
-                clip.start();
-            } catch (UnsupportedAudioFileException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
-            }
-        }else{
-            System.out.println("No existe");
-        }
         draw();
     }
 
@@ -180,7 +167,7 @@ public class GameController implements Initializable {
 
                                 gc.setFont(Font.font(35));
                                 gc.setFill(Color.YELLOW);
-                                int vic= scoreBoardController.search(avatar2.getName())+1;
+                                int vic=scoreBoardController.search(avatar.getName())+1;
                                 scoreBoardController.arr(avatar.getName(),vic);
                                 gc.fillText(avatar2.getName()+" \n won the game ",canvas.getWidth()/2, canvas.getHeight()/2);
 
@@ -500,10 +487,45 @@ public class GameController implements Initializable {
             rightPressed = true;
         }
         if(keyEvent.getCode() == KeyCode.R){
-            avatar.bullets=6;
+            if(avatar!=null) {
+                if (path3.exists()) {
+                    try {
+                        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(path3);
+                        Clip clip = AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    System.out.println("No existe");
+                }
+                avatar.bullets = 6;
+            }
         }
         if (keyEvent.getCode()==KeyCode.SPACE){
             if(avatar.bullets==0){
+                if(path2.exists()){
+                    try {
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path2);
+                        Clip clip= AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("No existe");
+                }
+            }else{
                 if(path1.exists()){
                     try {
                         AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
@@ -520,7 +542,6 @@ public class GameController implements Initializable {
                 }else{
                     System.out.println("No existe");
                 }
-            }else{
                 Bullet bullet = new Bullet(canvas,
                         new Vector(avatar.pos.x , avatar.pos.y),
                         new Vector(2*avatar.direction.x,2*avatar.direction.y),1);
@@ -530,11 +551,44 @@ public class GameController implements Initializable {
         }
         if(keyEvent.getCode()==KeyCode.SHIFT){
             if(avatar2.bullets!=0){
+                if(path1.exists()){
+                    try {
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path1);
+                        Clip clip= AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("No existe");
+                }
                 Bullet bullet = new Bullet(canvas,
                         new Vector(avatar2.pos.x , avatar2.pos.y),
                         new Vector(2*avatar2.direction.x,2*avatar2.direction.y),2);
                 bullets.add(bullet);
                 avatar2.bullets--;
+            }else {
+                if(path2.exists()){
+                    try {
+                        AudioInputStream audioInputStream= AudioSystem.getAudioInputStream(path2);
+                        Clip clip= AudioSystem.getClip();
+                        clip.open(audioInputStream);
+                        clip.start();
+                    } catch (UnsupportedAudioFileException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (LineUnavailableException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    System.out.println("No existe");
+                }
             }
         }
         if(keyEvent.getCode() == KeyCode.ENTER){

@@ -22,8 +22,6 @@ import javafx.stage.Stage;
 public class ScoreBoardController {
         ArrayList<Avatar>avatars=new ArrayList<>();
         Avatar avatar;
-        Avatar avatar2;
-
         @FXML
         private Button returnBTN;
         @FXML
@@ -116,15 +114,15 @@ public class ScoreBoardController {
             current.hide();
     }
 
-   public void arr(String name, int victories){
-            avatar=new Avatar(name,victories);
-            avatars.add(avatar);
-            avatars.sort(Comparator.comparing(Avatar::getWins));
-            for (int i = 0; i < avatars.size(); i++) {
-                    System.out.println(avatars.get(i).getName()+avatars.get(i).getWins());
-            }
-    }
-    int search(String name){
+        public void arr(String name, int victories){
+                avatar=new Avatar(name,victories);
+                avatars.add(avatar);
+                avatars.sort(Comparator.comparing(Avatar::getWins));
+                for (int i = 0; i < avatars.size(); i++) {
+                        System.out.println(avatars.get(i).getName()+avatars.get(i).getWins());
+                }
+        }
+        public int search(String name){
 
                 for (int i = 0; i < avatars.size(); i++) {
                         if(avatars.get(i).getName().equals(name)){
